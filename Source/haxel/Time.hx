@@ -25,15 +25,16 @@ class Time
     public static var postCallbackFunction:Int->Void;
 
 
-    private static var delta = 0;
+    private static var delta:Float = 0;
     private static var rate(get,null):Float;
-    private static var get_rate():Float
+    private static function get_rate():Float
     {
         return 1000 / framerate;
     }
     private static var skip(get,null):Float;
+    private static function get_skip():Float
     {
-        skip = rate * (maxFrameSkip + 1);
+        return rate * (maxFrameSkip + 1);
     }
     private static var last:Float;
     private static var timer:Timer;
@@ -45,7 +46,7 @@ class Time
         timer.run = onTimer;
     }
 
-    private function onTimer()
+    private static function onTimer()
     {
         var time = Lib.getTimer();
         delta += (time - last);
@@ -60,7 +61,7 @@ class Time
         {
             if(callbackFunction != null)
             {
-                var time = delta
+                var time = delta;
                 if(time > rate)
                 {
                     time = rate;

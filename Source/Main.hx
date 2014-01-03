@@ -5,6 +5,7 @@ import haxel.Core;
 import haxel.ScreenUtils;
 import haxel.Audio;
 import haxel.Input;
+import haxel.Time;
 import openfl.Assets;
 
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!//
@@ -37,5 +38,12 @@ class Main extends Core
         snd.play();
         //none of this seems to work for html5 QQQQQQQQQ
         Input.enable();
+        Time.init();
+        Time.callbackFunction = thing;
+    }
+
+    public function thing(thingy:Float)
+    {
+        trace(thingy);
     }
 }
