@@ -3,68 +3,118 @@ package haxel;
 // import flash.display.Stage;
 import flash.events.KeyboardEvent;
 import flash.events.MouseEvent;
+import flash.events.TouchEvent;
+import flash.ui.Keyboard;
+// import flash.ui.Multitouch;
+// import flash.ui.MultitouchInputMode;
 
 class Input 
 {
-    public static var mouseX(get, null):Float;
-    public static var mouseY(get, null):Float;
+    public static var keyString:String = "";
+    public static var lastKey:Int;
+    public static var mouseDown:Bool;
+    public static var mouseUp:Bool;
+    public static var mousePressed:Bool;
+    public static var mouseReleased:Bool;
+
+#if !js 
+    public static var rightMouseDown:Bool;
+    public static var rightMouseUp:Bool;
+    public static var rightMousePressed:Bool;
+    public static var rightMouseReleased:Bool;
+    public static var middleMouseDown:Bool;
+    public static var middleMouseUp:Bool;
+    public static var middleMousePressed:Bool;
+    public static var middleMouseReleased:Bool;
+#end
     
-    private static var _mouseX:Float;
-    private static var _mouseY:Float;
-    
-    private static var :Bool;
-    // private static var _stage:Stage;
-    
-    private static var _currentKeyPressed:Int;
-    private static var _currentKeyReleased:Int;
-    private static var _lastKeyPressed:Int;
-    private static var _keyCode:Int;
-    
-    private static var _keys:Array<Bool>;
-    
-    private static var _leftMouseDown:Bool;
-    private static var _leftMousePressed:Bool;
-    private static var _leftMouseReleased:Bool;
-    private static var _rightMouseDown:Bool;
-    private static var _rightMousePressed:Bool;
-    private static var _rightMouseReleased:Bool;
-    
-    private static var _keyMap:Map < String, Array<Int> > ;
+    /**
+     * If the mouse wheel has moved
+     */
+    public static var mouseWheel:Bool;
+
+    /**
+     * Returns true if the device supports multi touch
+     */
+    // public static var multiTouchSupported(default, null):Bool = false;
+
+    /**
+     * If the mouse wheel was moved this frame, this was the delta.
+     */
+    public static var mouseWheelDelta(get_mouseWheelDelta, never):Int;
+    public static function get_mouseWheelDelta():Int
+    {
+        if (mouseWheel)
+        {
+            mouseWheel = false;
+            return _mouseWheelDelta;
+        }
+        return 0;
+    }
+
+    public static var mouseX(get_mouseX, never):Float;
+    private static function get_mouseX():Float
+    {
+        return Core.instance.mouseX;
+    }
+
+    public static var mouseY(get_mouseY, never):Float;
+    private static function get_mouseY():Float
+    {
+        return Core.instance.mouseY;
+    }
+
+    public static function check(input:Dynamic):Bool
+    {
+        return input < 0 ? _keyNum > 0 : _key[input];
+    }
+
+    public static function pressed(input:Dynamic):Bool
+    {
+        return (input < 0) ? _pressNum != 0 : indexOf(_press, input) >= 0;
+    }
+
+    public static function released(input:Dynamic):Bool
+    {
+        return (input < 0) ? _releaseNum != 0 : indexOf(_release, input) >= 0;
+    }
     
     public static function enable()
     {
-        if (!_enabled && HXP.stage != null)
+        if (!_enabled)
         {
-            HXP.stage.addEventListener(KeyboardEvent.KEY_DOWN, onKeyDown, false,  2);
-            HXP.stage.addEventListener(KeyboardEvent.KEY_UP, onKeyUp, false,  2);
-            HXP.stage.addEventListener(MouseEvent.MOUSE_DOWN, onMouseDown, false,  2);
-            HXP.stage.addEventListener(MouseEvent.MOUSE_UP, onMouseUp, false,  2);
-            HXP.stage.addEventListener(MouseEvent.MOUSE_WHEEL, onMouseWheel, false,  2);
+            //may as well keep it at priority 2 for now
+            //will fuck with it eventually
+            Core.instance.stage.addEventListener(KeyboardEvent.KEY_DOWN, onKeyDown, false,  2);
+            Core.instance.stage.addEventListener(KeyboardEvent.KEY_UP, onKeyUp, false,  2);
+            Core.instance.stage.addEventListener(MouseEvent.MOUSE_DOWN, onMouseDown, false,  2);
+            Core.instance.stage.addEventListener(MouseEvent.MOUSE_UP, onMouseUp, false,  2);
+            Core.instance.stage.addEventListener(MouseEvent.MOUSE_WHEEL, onMouseWheel, false,  2);
             
         #if !js
-            HXP.stage.addEventListener(MouseEvent.MIDDLE_MOUSE_DOWN, onMiddleMouseDown, 2);
-            HXP.stage.addEventListener(MouseEvent.MIDDLE_MOUSE_UP, onMiddleMouseUp, 2);
-            HXP.stage.addEventListener(MouseEvent.RIGHT_MOUSE_DOWN, onRightMouseDown, 2);
-            HXP.stage.addEventListener(MouseEvent.RIGHT_MOUSE_UP, onRightMouseUp, 2);
+            Core.instance.stage.addEventListener(MouseEvent.MIDDLE_MOUSE_DOWN, onMiddleMouseDown, 2);
+            Core.instance.stage.addEventListener(MouseEvent.MIDDLE_MOUSE_UP, onMiddleMouseUp, 2);
+            Core.instance.stage.addEventListener(MouseEvent.RIGHT_MOUSE_DOWN, onRightMouseDown, 2);
+            Core.instance.stage.addEventListener(MouseEvent.RIGHT_MOUSE_UP, onRightMouseUp, 2);
         #end
         
-            multiTouchSupported = Multitouch.supportsTouchEvents;
-            if (multiTouchSupported)
-            {
-                Multitouch.inputMode = MultitouchInputMode.TOUCH_POINT;
+            // multiTouchSupported = Multitouch.supportsTouchEvents;
+            // if (multiTouchSupported)
+            // {
+            //     Multitouch.inputMode = MultitouchInputMode.TOUCH_POINT;
 
-                HXP.stage.addEventListener(TouchEvent.TOUCH_BEGIN, onTouchBegin);
-                HXP.stage.addEventListener(TouchEvent.TOUCH_MOVE, onTouchMove);
-                HXP.stage.addEventListener(TouchEvent.TOUCH_END, onTouchEnd);
-            }
+            //     Core.stage.addEventListener(TouchEvent.TOUCH_BEGIN, onTouchBegin);
+            //     Core.stage.addEventListener(TouchEvent.TOUCH_MOVE, onTouchMove);
+            //     Core.stage.addEventListener(TouchEvent.TOUCH_END, onTouchEnd);
+            // }
 
-#if ((nme || openfl) && (cpp || neko))
-            HXP.stage.addEventListener(JoystickEvent.AXIS_MOVE, onJoyAxisMove);
-            HXP.stage.addEventListener(JoystickEvent.BALL_MOVE, onJoyBallMove);
-            HXP.stage.addEventListener(JoystickEvent.BUTTON_DOWN, onJoyButtonDown);
-            HXP.stage.addEventListener(JoystickEvent.BUTTON_UP, onJoyButtonUp);
-            HXP.stage.addEventListener(JoystickEvent.HAT_MOVE, onJoyHatMove);
-#end
+// #if ((nme || openfl) && (cpp || neko))
+//             HXP.stage.addEventListener(JoystickEvent.AXIS_MOVE, onJoyAxisMove);
+//             HXP.stage.addEventListener(JoystickEvent.BALL_MOVE, onJoyBallMove);
+//             HXP.stage.addEventListener(JoystickEvent.BUTTON_DOWN, onJoyButtonDown);
+//             HXP.stage.addEventListener(JoystickEvent.BUTTON_UP, onJoyButtonUp);
+//             HXP.stage.addEventListener(JoystickEvent.HAT_MOVE, onJoyHatMove);
+// #end
 
         #if !(flash || js)
             _nativeCorrection.set("0_64", Key.INSERT);
@@ -123,226 +173,159 @@ class Input
             _nativeCorrection.set("44_266", Key.NUMPAD_DECIMAL); // comma
             _nativeCorrection.set("47_267", Key.NUMPAD_DIVIDE);
         #end
+
+            _enabled = true;
         }
     }
     
-    public static function update():Void
+    private static function onKeyDown(e:KeyboardEvent = null)
     {
-        if (_leftMousePressed)
+        var code:Int = keyCode(e);
+        if (code == -1) // No key
+            return;
+            
+        lastKey = code;
+
+        if (code == Key.BACKSPACE) keyString = keyString.substr(0, keyString.length - 1);
+        else if ((code > 47 && code < 58) || (code > 64 && code < 91) || code == 32)
         {
-            _leftMousePressed = false;
+            if (keyString.length > kKeyStringMax) keyString = keyString.substr(1);
+            var char:String = String.fromCharCode(code);
+
+            if (e.shiftKey != #if flash Keyboard.capsLock #else check(Key.CAPS_LOCK) #end)
+                char = char.toUpperCase();
+            else char = char.toLowerCase();
+
+            keyString += char;
         }
+
+        if (!_key[code])
+        {
+            _key[code] = true;
+            _keyNum++;
+            _press[_pressNum++] = code;
+        }
+        trace(code);
+    }
+
+    private static function onKeyUp(e:KeyboardEvent = null)
+    {
+        var code:Int = keyCode(e);
+        if (code == -1) // No key
+            return;
         
-        if (_leftMouseReleased)
+        if (_key[code])
         {
-            _leftMouseReleased = false;
+            _key[code] = false;
+            _keyNum--;
+            _release[_releaseNum++] = code;
         }
+    }
+    
+    public static function keyCode(e:KeyboardEvent) : Int
+    {
+    #if (flash || js)
+        return e.keyCode;
+    #else       
+        var code = _nativeCorrection.get(e.charCode + "_" + e.keyCode);
         
-        //if (_rightMousePressed)
-        //{
-            //_rightMousePressed = false;
-        //}
-        //
-        //if (_rightMouseReleased)
-        //{
-            //_rightMouseReleased = false;
-        //}
-        
-        _mouseX = _stage.mouseX;
-        _mouseY = _stage.mouseY;
-        _lastKeyPressed = _currentKeyPressed;
-    }
-    
-    public static function addKey(name:String, ?key:Int, ?keys:Array<Int>):Void
-    {
-        if (_keyMap.exists(name))
-        {
-            _keyMap.get(name).push(key);
-        }
+        if (code == null)
+            return e.keyCode;
         else
+            return code;
+    #end
+    }
+
+    private static function onMouseDown(e:MouseEvent)
+    {
+        if (!mouseDown)
         {
-            if (key != null)
-            {
-                _keyMap.set(name, [key]);
-            }
-            else
-            {
-                _keyMap.set(name, keys);
-            }
+            mouseDown = true;
+            mouseUp = false;
+            mousePressed = true;
+        }
+    }
+
+    private static function onMouseUp(e:MouseEvent)
+    {
+        mouseDown = false;
+        mouseUp = true;
+        mouseReleased = true;
+    }
+
+    private static function onMouseWheel(e:MouseEvent)
+    {
+        mouseWheel = true;
+        _mouseWheelDelta = e.delta;
+    }
+
+#if !js
+    private static function onMiddleMouseDown(e:MouseEvent)
+    {
+        if (!middleMouseDown)
+        {
+            middleMouseDown = true;
+            middleMouseUp = false;
+            middleMousePressed = true;
         }
     }
     
-    private static function keyDownEvent(event:KeyboardEvent):Void
+    private static function onMiddleMouseUp(e:MouseEvent)
     {
-        _currentKeyPressed = _keyCode = event.keyCode;
-        _keys[event.keyCode] = true;
+        middleMouseDown = false;
+        middleMouseUp = true;
+        middleMouseReleased = true;
     }
     
-    private static function keyUpEvent(event:KeyboardEvent):Void
+    private static function onRightMouseDown(e:MouseEvent)
     {
-        _currentKeyPressed = -1;
-        _lastKeyPressed = -1;
-        
-        _currentKeyReleased = event.keyCode;
-        _keys[event.keyCode] = false;
-    }
-    
-    public static function keyPressed(?keyInt:Int, ?keyString:String):Bool
-    {
-        if (keyInt != null)
+        if (!rightMouseDown)
         {
-            return checkKeyPressed(keyInt);
-        }
-        else
-        {
-            var keys:Array<Int> = _keyMap.get(keyString);
-            if (keys != null)
-            {
-                for (key in keys)
-                {
-                    if (checkKeyPressed(key))
-                    {
-                        return true;
-                    }
-                }
-            }
-        }
-        
-        return false;
-    }
-    
-    public static function anyKeyPressed():Bool 
-    {
-        for (key in _keys)
-        {
-            if (key)
-            {
-                return key;
-            }
-        }
-        return false;
-    }
-    
-    public static function keyDown(?keyInt:Int, ?keyString:String):Bool
-    {
-        if (keyInt != null)
-        {
-            return _keys[keyInt];
-        }
-        else
-        {
-            var keys:Array<Int> = _keyMap.get(keyString);
-            if (keys != null)
-            {
-                for (key in keys)
-                {
-                    if (_keys[key])
-                    {
-                        return true;
-                    }
-                }
-            }
-        }
-        return false;
-    }
-    
-    public static function keyUp(keyInt:Int):Bool
-    {
-        if (keyInt == _currentKeyReleased)
-        {
-            _currentKeyReleased = -1;
-            return true;
-        }
-        else
-        {
-            return false;
+            rightMouseDown = true;
+            rightMouseUp = false;
+            rightMousePressed = true;
         }
     }
     
-    private static function mouseDownEvent(event:MouseEvent):Void
+    private static function onRightMouseUp(e:MouseEvent)
     {
-        _leftMouseDown = true;
-        _leftMousePressed = true;
-        _leftMouseReleased = false;
+        rightMouseDown = false;
+        rightMouseUp = true;
+        rightMouseReleased = true;
     }
-    
-    private static function mouseUpEvent(event:MouseEvent):Void
+#end
+
+    private static function indexOf(a:Array<Int>, v:Int):Int
     {
-        _leftMouseDown = false;
-        _leftMousePressed = false;
-        _leftMouseReleased = true;
-    }
-    
-    private static function rightMouseUpEvent(event:MouseEvent):Void 
-    {
-        _rightMouseDown = true;
-        _rightMousePressed = true;
-        _rightMouseReleased = false;
-    }
-    
-    private static function rightMouseDownEvent(event:MouseEvent):Void 
-    {
-        _rightMouseDown = false;
-        _rightMousePressed = false;
-        _rightMouseReleased = true;
-    }
-    
-    public static function leftMouseReleased():Bool
-    {
-        return _leftMouseReleased;
-    }
-    
-    public static function leftMouseDown():Bool
-    {
-        return _leftMouseDown;
-    }
-    
-    public static function leftMousePressed():Bool
-    {
-        return _leftMousePressed;
-    }
-    
-    //public static function rightMouseReleased():Bool
-    //{
-        //return _rightMouseReleased;
-    //}
-    //
-    //public static function rightMouseDown():Bool
-    //{
-        //return _rightMouseDown;
-    //}
-    //
-    //public static function rightMousePressed():Bool
-    //{
-        //return _rightMousePressed;
-    //}
-    
-    public static function mouseMoved():Bool
-    {
-        if (_mouseX != _stage.mouseX || _mouseY != _stage.mouseY)
-        {
-            _mouseX = _stage.mouseX;
-            _mouseY = _stage.mouseY;
-            return true;
+        var i = 0;
+        for( v2 in a ) {
+            if( v == v2 )
+                return i;
+            i++;
         }
-        else
-        {
-            return false;
-        }
+        return -1;
     }
-    
-    public static function keyCode():Int
-    {
-        return _keyCode;
-    }
-    
-    private static function get_mouseX():Float
-    {
-        return _stage.mouseX;
-    }
-    
-    private static function get_mouseY():Float
-    {
-        return _stage.mouseY;
-    }
+
+    private static inline var kKeyStringMax = 100;
+
+    private static var _enabled:Bool = false;
+    // private static var _touchNum:Int = 0;
+    private static var _key:Array<Bool> = new Array<Bool>();
+    private static var _keyNum:Int = 0;
+    private static var _press:Array<Int> = new Array<Int>();
+    private static var _pressNum:Int = 0;
+    private static var _release:Array<Int> = new Array<Int>();
+    private static var _releaseNum:Int = 0;
+    private static var _mouseWheelDelta:Int = 0;
+#if haxe3
+    // private static var _touches:Map<Int,Touch> = new Map<Int,Touch>();
+    // private static var _joysticks:Map<Int,Joystick> = new Map<Int,Joystick>();
+    private static var _control:Map<String,Array<Int>> = new Map<String,Array<Int>>();
+    private static var _nativeCorrection:Map<String, Int> = new Map<String, Int>();
+#else
+    // private static var _touches:IntHash<Touch> = new IntHash<Touch>();
+    // private static var _joysticks:IntHash<Joystick> = new IntHash<Joystick>();
+    private static var _control:Hash<Array<Int>> = new Hash<Array<Int>>();
+    private static var _nativeCorrection:Hash<Int> = new Hash<Int>();
+#end
 }

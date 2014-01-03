@@ -30,6 +30,7 @@ class Core extends Sprite
     public static var renderMode:RenderMode;
     public static var buffer:BitmapData;
     public static var screen:BitmapData;
+    public static var instance:Core;
 
     public static var fillColor:UInt;
 
@@ -62,6 +63,8 @@ class Core extends Sprite
         screen = new BitmapData (stage.stageWidth,stage.stageHeight,false,fillColor);
 
         addChild (new Bitmap(screen)); //creates a bitmap out of the screen BD and adds it to the sprite
+
+        instance = this;
     }
 
     public static function createBuffer()

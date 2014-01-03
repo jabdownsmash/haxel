@@ -4,6 +4,7 @@ import flash.display.BitmapData;
 import haxel.Core;
 import haxel.ScreenUtils;
 import haxel.Audio;
+import haxel.Input;
 import openfl.Assets;
 
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!//
@@ -35,5 +36,6 @@ class Main extends Core
         trace(snd.position);
         snd.play();
         //none of this seems to work for html5 QQQQQQQQQ
+        Input.enable();
     }
 }
