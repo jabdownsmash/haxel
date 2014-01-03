@@ -8,6 +8,15 @@ import flash.ui.Keyboard;
 // import flash.ui.Multitouch;
 // import flash.ui.MultitouchInputMode;
 
+//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!//
+//                                                                          //
+//   Because of the nature of this project, please PLEASE test any change   //
+//   on HTML5, Flash, AND native. Any changes made for compatibility or     //
+//   optimization ABSOLUTELY NEED to be fully documented: reasons, effects  //
+//   and changes made. -Aaron                                               //
+//                                                                          //
+//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!//
+
 class Input 
 {
     public static var keyString:String = "";

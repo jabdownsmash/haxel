@@ -22,7 +22,7 @@ class Main extends Core
     public function new ()
     {
         super();
-        var image = Assets.getBitmapData ("assets/openfl.png");
+        var image = Assets.getBitmapData("assets/openfl.png");
         Core.draw(image,320,190,image.rect.width/2,image.rect.height/2,.7,.8,Math.PI/2);
         ScreenUtils.scaleScreen(.2);
         // ScreenUtils.resetScreenTransform();
