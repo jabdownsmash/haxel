@@ -4,8 +4,9 @@ import flash.display.BitmapData;
 import haxel.Core;
 import haxel.Screen;
 import haxel.Primitives;
-import haxel.Audio;
-import haxel.Input;
+// import haxel.AudioObject;
+import haxel.KeyboardInput;
+import haxel.MouseInput;
 import haxel.Time;
 import openfl.Assets;
 
@@ -23,27 +24,48 @@ class Main extends Core
     public function new ()
     {
         super();
-        var image = Assets.getBitmapData("assets/openfl.png");
-        Screen.draw(image,320,190,image.rect.width/2,image.rect.height/2,.7,.8,Math.PI/2);
-        Screen.scaleScreen(3);
-        Primitives.drawLine(2,3,60,80,0xFFFFFF);
-        Primitives.drawCircle(90,80,100,0xFFFFFF);
-        Screen.resetScreenTransform();
-        Screen.flip();
+        Time.callbackFunction = timerTest;
+        Time.postCallbackFunction = timerDraw;
+    }
 
-        var snd = new Audio("assets/test.wav");
-        snd.pan = 1;
-        snd.play();
-        snd.volume = .4;
-        snd.position = 600;
-        snd.stop();
+    var init:Bool = false;
+    var image:BitmapData;
+
+    public function timerDraw(times:Float)
+    {
+        // trace(MouseInput.mouseX);
+
+        if(!init)
+        {
+            image = Assets.getBitmapData("assets/openfl.png");
+            Screen.scaleScreen(1);
+            init = true;
+        }
+        // Screen.renderMode = SCREEN_RENDER;
+        // Core.draw(image,320,190,image.rect.width/2,image.rect.height/2,.7,.8,Math.PI/2);
+        // Primitives.drawLine(60,80,80,150,0xFFFFFF);
+        Primitives.drawLine(10,15,60,70,0xFFFFFF, true);
+        // Primitives.drawCircle(151,101,100,0xFFFFFF, true, 0);
+        Primitives.drawCircle(101,101,100,0xFFFFFF, 1, true, 1);
+        //Primitives.drawCircle(250,200,100,0xFFFFFF, 0);
+        // Primitives.drawPolygon([[200, 200,],[200, 300],[300,300]], 0xFFFFFF);
+        //Primitives.drawEllipse(200,200,100,50,0xFFFFFF);
+        // ScreenUtils.resetScreenTransform();
+
+        // var snd = new Audio("assets/test.wav");
+        // snd.pan = 1;
+        // snd.play();
+        // snd.volume = .4;
+        // snd.position = 600;
+        // snd.stop();
         // trace(snd.position);
         // snd.play();
-        Time.callbackFunction = timerTest;
+        //none of this seems to work for html5 QQQQQQQQQ
+        Screen.flip();
+        Screen.clear(Screen.fillColor);
     }
 
     public function timerTest(timeBetweenCalls:Float)
     {
-        trace(Input.mouseX);
     }
 }

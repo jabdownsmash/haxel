@@ -20,13 +20,13 @@ import openfl.Assets;
 // and neither does the position argument.
 // in bitfive i couldn't get sound to work at all.
 
-class Audio
+class AudioObject
 {
     public var volume(get, set):Float;
     public var pan(get, set):Float;
     public var playing(default, null):Bool;
     public var position(get, set):Float;
-    public var callbackFunction:Audio->Bool->Void;
+    public var callbackFunction:AudioObject->Bool->Void;
     public var callbackBeforeEnd:Bool;
     public var callbackAfterEnd:Bool;
     public var loop:Bool;
