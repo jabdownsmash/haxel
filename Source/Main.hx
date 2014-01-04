@@ -2,7 +2,8 @@
 import flash.display.Bitmap;
 import flash.display.BitmapData;
 import haxel.Core;
-import haxel.ScreenUtils;
+import haxel.Screen;
+import haxel.Primitives;
 import haxel.Audio;
 import haxel.Input;
 import haxel.Time;
@@ -23,10 +24,12 @@ class Main extends Core
     {
         super();
         var image = Assets.getBitmapData("assets/openfl.png");
-        Core.draw(image,320,190,image.rect.width/2,image.rect.height/2,.7,.8,Math.PI/2);
-        ScreenUtils.scaleScreen(.2);
-        // ScreenUtils.resetScreenTransform();
-        Core.flip();
+        Screen.draw(image,320,190,image.rect.width/2,image.rect.height/2,.7,.8,Math.PI/2);
+        Screen.scaleScreen(3);
+        Primitives.drawLine(2,3,60,80,0xFFFFFF);
+        Primitives.drawCircle(90,80,100,0xFFFFFF);
+        Screen.resetScreenTransform();
+        Screen.flip();
 
         var snd = new Audio("assets/test.wav");
         snd.pan = 1;
@@ -34,16 +37,13 @@ class Main extends Core
         snd.volume = .4;
         snd.position = 600;
         snd.stop();
-        trace(snd.position);
-        snd.play();
-        //none of this seems to work for html5 QQQQQQQQQ
-        Input.enable();
-        Time.init();
-        Time.callbackFunction = thing;
+        // trace(snd.position);
+        // snd.play();
+        Time.callbackFunction = timerTest;
     }
 
-    public function thing(thingy:Float)
+    public function timerTest(timeBetweenCalls:Float)
     {
-        trace(thingy);
+        trace(Input.mouseX);
     }
 }

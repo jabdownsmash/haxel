@@ -43,10 +43,10 @@ class Time
     {
         last = Lib.getTimer();
         timer = new Timer(tickRate);
-        timer.run = onTimer;
+        timer.run = onTimerTick;
     }
 
-    private static function onTimer()
+    private static function onTimerTick()
     {
         var time = Lib.getTimer();
         delta += (time - last);
@@ -59,18 +59,18 @@ class Time
 
         while (delta >= rate)
         {
+            Core.updateFrame();
+
             if(callbackFunction != null)
             {
-                var time = delta;
-                if(time > rate)
-                {
-                    time = rate;
-                }
-                callbackFunction(time);
+                callbackFunction(rate);
             }
+
             delta -= rate;
             framesCalled += 1;
         }
+
+        Core.updatePostFrame();
 
         if(postCallbackFunction != null)
         {
