@@ -5,6 +5,15 @@ import flash.display.BitmapData;
 import flash.display.Bitmap;
 import flash.geom.Matrix;
 
+//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!//
+//                                                                          //
+//   Because of the nature of this project, please PLEASE test any change   //
+//   on HTML5, Flash, AND native. Any changes made for compatibility or     //
+//   optimization ABSOLUTELY NEED to be fully documented: reasons, effects  //
+//   and changes made. -Aaron                                               //
+//                                                                          //
+//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!//
+
 class GraphicObject
 {
 
@@ -26,11 +35,18 @@ class GraphicObject
         bitmapData = new BitmapData(width,height,alpha,fillColor.getUInt());
     }
 
-    public function draw(image:GraphicObject,?transformMatrix:Matrix,x:Float = 0,y:Float = 0, centerX:Float = 0, centerY:Float = 0, xScale:Float = 1, yScale:Float = 1, rotation:Float = 0)
+    public function draw(image:Dynamic,?transformMatrix:Matrix,x:Float = 0,y:Float = 0, centerX:Float = 0, centerY:Float = 0, xScale:Float = 1, yScale:Float = 1, rotation:Float = 0)
     {
         if(transformMatrix != null)
         {
-            bitmapData.draw(image.bitmapData,transformMatrix);
+            if(Std.is(image, GraphicObject))
+            {
+                bitmapData.draw(image.bitmapData,transformMatrix);
+            }
+            else
+            {
+                bitmapData.draw(image,transformMatrix);
+            }
         }
         else
         {
@@ -47,6 +63,11 @@ class GraphicObject
     public function getBitmap()
     {
         return new Bitmap(bitmapData);
+    }
+
+    public function getBitmapData()
+    {
+        return bitmapData;
     }
 
     public function lock()
