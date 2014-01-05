@@ -16,7 +16,7 @@ class Primitives
 {
     private static var m = Math;
     
-    private static function setAAPixel(x:Float, y:Float, color:ColorObject, alpha:Float=1, antiAlias:Bool=false, drawTarget:GraphicObject)
+    private static function setAAPixel(drawTarget:GraphicObject, x:Float, y:Float, color:ColorObject, alpha:Float=1, antiAlias:Bool=false)
     {
         if(!antiAlias)
         {
@@ -53,7 +53,7 @@ class Primitives
         }
     }
 
-    private static function drawSolidLine(startX:Float, startY:Float, endX:Float, endY:Float, color:ColorObject, alpha:Float, drawTarget:GraphicObject)
+    private static function drawSolidLine(drawTarget:GraphicObject, startX:Float, startY:Float, endX:Float, endY:Float, color:ColorObject, alpha:Float)
     {
         var dx:Float = m.abs(endX - startX);
         var dy:Float = m.abs(endY - startY);
@@ -96,7 +96,7 @@ class Primitives
         }
     }
 
-    private static function drawAALine(startX:Float, startY:Float, endX:Float, endY:Float, color:ColorObject, alpha:Float, drawTarget:GraphicObject)
+    private static function drawAALine(drawTarget:GraphicObject, startX:Float, startY:Float, endX:Float, endY:Float, color:ColorObject, alpha:Float)
     {
         var steep:Bool = m.abs(endY - startY) > m.abs(endX - startX);
  
@@ -186,7 +186,7 @@ class Primitives
         // trace(steep);
     }
     
-    public static function drawLine(startX:Float, startY:Float, endX:Float, endY:Float, color:ColorObject, ?alpha:Float, ?lineWidth:Float, ?antiAlias:Bool, ?drawTarget:GraphicObject)
+    public static function drawLine(?drawTarget:GraphicObject, startX:Float, startY:Float, endX:Float, endY:Float, color:ColorObject, ?alpha:Float, ?lineWidth:Float, ?antiAlias:Bool)
     {
         if(drawTarget == null)
         {
@@ -203,13 +203,13 @@ class Primitives
         if(lineWidth == null || lineWidth == 0)
         {
             if(antiAlias == null || antiAlias == false)
-                drawSolidLine(startX,startY,endX,endY,color,alpha,drawTarget);
+                drawSolidLine(drawTarget,startX,startY,endX,endY,color,alpha);
             else
-                drawAALine(startX,startY,endX,endY,color,alpha,drawTarget);
+                drawAALine(drawTarget,startX,startY,endX,endY,color,alpha);
         }
         else
         {
-            // drawWidthLine(startX,startY,endX,endY,color,alpha,lineWidth,drawTarget);
+            // drawWidthLine(drawTarget,startX,startY,endX,endY,color,alpha,lineWidth);
         }
         
         //releases control of drawTarget
@@ -218,7 +218,7 @@ class Primitives
         drawTarget.unlock();
     }
     
-    public static function drawCircle(centerX:Float, centerY:Float, radius:Float, color:ColorObject, alpha:Float=1, antiAlias:Bool=false, lineWidth:Float=1, ?drawTarget:GraphicObject)
+    public static function drawCircle(?drawTarget:GraphicObject, centerX:Float, centerY:Float, radius:Float, color:ColorObject, alpha:Float=1, antiAlias:Bool=false, lineWidth:Float=1)
     {
         if(drawTarget == null)
         {
@@ -231,45 +231,45 @@ class Primitives
             if(lineWidth==0)
             {
                 var y:Float = m.sqrt(radius*radius - x*x);
-                drawSolidLine(m.round(centerX+x), m.round(centerY), m.round(centerX + x), m.round(centerY+y), color, alpha, drawTarget);
-                drawSolidLine(m.round(centerX+x), m.round(centerY), m.round(centerX + x), m.round(centerY-y), color, alpha, drawTarget);
-                drawSolidLine(m.round(centerX-x), m.round(centerY), m.round(centerX - x), m.round(centerY+y), color, alpha, drawTarget);
-                drawSolidLine(m.round(centerX-x), m.round(centerY), m.round(centerX - x), m.round(centerY-y), color, alpha, drawTarget);
-                drawSolidLine(m.round(centerX+y), m.round(centerY), m.round(centerX + y), m.round(centerY+x), color, alpha, drawTarget);
-                drawSolidLine(m.round(centerX+y), m.round(centerY), m.round(centerX + y), m.round(centerY-x), color, alpha, drawTarget);
-                drawSolidLine(m.round(centerX-y), m.round(centerY), m.round(centerX - y), m.round(centerY+x), color, alpha, drawTarget);
-                drawSolidLine(m.round(centerX-y), m.round(centerY), m.round(centerX - y), m.round(centerY-x), color, alpha, drawTarget);
+                drawSolidLine(drawTarget, m.round(centerX+x), m.round(centerY), m.round(centerX + x), m.round(centerY+y), color, alpha);
+                drawSolidLine(drawTarget, m.round(centerX+x), m.round(centerY), m.round(centerX + x), m.round(centerY-y), color, alpha);
+                drawSolidLine(drawTarget, m.round(centerX-x), m.round(centerY), m.round(centerX - x), m.round(centerY+y), color, alpha);
+                drawSolidLine(drawTarget, m.round(centerX-x), m.round(centerY), m.round(centerX - x), m.round(centerY-y), color, alpha);
+                drawSolidLine(drawTarget, m.round(centerX+y), m.round(centerY), m.round(centerX + y), m.round(centerY+x), color, alpha);
+                drawSolidLine(drawTarget, m.round(centerX+y), m.round(centerY), m.round(centerX + y), m.round(centerY-x), color, alpha);
+                drawSolidLine(drawTarget, m.round(centerX-y), m.round(centerY), m.round(centerX - y), m.round(centerY+x), color, alpha);
+                drawSolidLine(drawTarget, m.round(centerX-y), m.round(centerY), m.round(centerX - y), m.round(centerY-x), color, alpha);
             }
             else
             {
                 var y:Float = m.sqrt(radius*radius - x*x);
-                setAAPixel(centerX + x, centerY+y, color, alpha, antiAlias, drawTarget);
-                setAAPixel(centerX + x, centerY-y, color, alpha, antiAlias, drawTarget);
-                setAAPixel(centerX - x, centerY+y, color, alpha, antiAlias, drawTarget);
-                setAAPixel(centerX - x, centerY-y, color, alpha, antiAlias, drawTarget);
-                setAAPixel(centerX + y, centerY+x, color, alpha, antiAlias, drawTarget);
-                setAAPixel(centerX + y, centerY-x, color, alpha, antiAlias, drawTarget);
-                setAAPixel(centerX - y, centerY+x, color, alpha, antiAlias, drawTarget);
-                setAAPixel(centerX - y, centerY-x, color, alpha, antiAlias, drawTarget);
+                setAAPixel(drawTarget, centerX + x, centerY+y, color, alpha, antiAlias);
+                setAAPixel(drawTarget, centerX + x, centerY-y, color, alpha, antiAlias);
+                setAAPixel(drawTarget, centerX - x, centerY+y, color, alpha, antiAlias);
+                setAAPixel(drawTarget, centerX - x, centerY-y, color, alpha, antiAlias);
+                setAAPixel(drawTarget, centerX + y, centerY+x, color, alpha, antiAlias);
+                setAAPixel(drawTarget, centerX + y, centerY-x, color, alpha, antiAlias);
+                setAAPixel(drawTarget, centerX - y, centerY+x, color, alpha, antiAlias);
+                setAAPixel(drawTarget, centerX - y, centerY-x, color, alpha, antiAlias);
             }
         }
         if(antiAlias)
         {
             var x:Float = m.floor(c);
             var y:Float = m.sqrt(radius*radius - x*x);
-            setAAPixel(centerX + x, centerY+y, color, alpha, antiAlias, drawTarget);
-            setAAPixel(centerX + x, centerY-y, color, alpha, antiAlias, drawTarget);
-            setAAPixel(centerX - x, centerY+y, color, alpha, antiAlias, drawTarget);
-            setAAPixel(centerX - x, centerY-y, color, alpha, antiAlias, drawTarget);
-            // setAAPixel(centerX + y, centerY+x, color, alpha, antiAlias, drawTarget);
-            // setAAPixel(centerX + y, centerY-x, color, alpha, antiAlias, drawTarget);
-            // setAAPixel(centerX - y, centerY+x, color, alpha, antiAlias, drawTarget);
-            // setAAPixel(centerX - y, centerY-x, color, alpha, antiAlias, drawTarget);
+            setAAPixel(drawTarget, centerX + x, centerY+y, color, alpha, antiAlias);
+            setAAPixel(drawTarget, centerX + x, centerY-y, color, alpha, antiAlias);
+            setAAPixel(drawTarget, centerX - x, centerY+y, color, alpha, antiAlias);
+            setAAPixel(drawTarget, centerX - x, centerY-y, color, alpha, antiAlias);
+            // setAAPixel(drawTarget, centerX + y, centerY+x, color, alpha, antiAlias);
+            // setAAPixel(drawTarget, centerX + y, centerY-x, color, alpha, antiAlias);
+            // setAAPixel(drawTarget, centerX - y, centerY+x, color, alpha, antiAlias);
+            // setAAPixel(drawTarget, centerX - y, centerY-x, color, alpha, antiAlias);
         }
         drawTarget.unlock();
     }
 
-    public static function drawEllipse(centerX:Float, centerY:Float, a:Float, b:Float, color:ColorObject, ?AntiAlias:Bool, ?drawTarget:GraphicObject)
+    public static function drawEllipse(?drawTarget:GraphicObject, centerX:Float, centerY:Float, a:Float, b:Float, color:ColorObject, ?AntiAlias:Bool)
     {
         if(drawTarget == null)
         {
@@ -287,7 +287,7 @@ class Primitives
         drawTarget.unlock();
     }
 
-    public static function drawPolygon(points:Array<Array<Float>>, color:ColorObject, ?lineWidth, ?antiAlias:Bool, ?drawTarget:GraphicObject)
+    public static function drawPolygon(?drawTarget:GraphicObject, points:Array<Array<Float>>, color:ColorObject, ?lineWidth, ?antiAlias:Bool)
     {
         if(drawTarget == null)
         {
@@ -310,7 +310,7 @@ class Primitives
                 var x:Float = points[i][0];
                 var y:Float = points[i][1];
                 //trace(lastX+", "+lastY+", "+x+", "+y);
-                drawLine(lastX, lastY, x, y, color, lineWidth, antiAlias, drawTarget);
+                drawLine(drawTarget, lastX, lastY, x, y, color, lineWidth, antiAlias);
                 
                 lastX = x;
                 lastY = y;

@@ -72,7 +72,7 @@ class Screen
         return buffer;
     }
 
-    public static function draw(image:GraphicObject,x:Float,y:Float, centerX:Float = 0, centerY:Float = 0, xScale:Float = 1, yScale:Float = 1, rotation:Float = 0)
+    public static function draw(image:Dynamic,x:Float,y:Float, centerX:Float = 0, centerY:Float = 0, xScale:Float = 1, yScale:Float = 1, rotation:Float = 0)
     {
         x += virtualScreenStartX;
         y += virtualScreenStartY;

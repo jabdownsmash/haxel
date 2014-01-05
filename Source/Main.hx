@@ -44,7 +44,7 @@ class Main extends Core
             init = true;
         }
         // Screen.renderMode = SCREEN_RENDER;
-        // Core.draw(image,320,190,image.rect.width/2,image.rect.height/2,.7,.8,Math.PI/2);
+        Screen.draw(image,320,190,image.rect.width/2,image.rect.height/2,.7,.8,Math.PI/2);
         // Primitives.drawLine(60,80,80,150,0xFFFFFF);
         Primitives.drawLine(10,15,60,70,new ColorObject(1,1,1), true);
         // Primitives.drawCircle(151,101,100,0xFFFFFF, true, 0);
