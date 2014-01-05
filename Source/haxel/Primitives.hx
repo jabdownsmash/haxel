@@ -1,8 +1,6 @@
 
 package haxel;
 
-import flash.display.Bitmap;
-import flash.display.BitmapData;
 import haxel.Core;
 
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!//
@@ -17,36 +15,12 @@ import haxel.Core;
 class Primitives
 {
     private static var m = Math;
-
-    private static function alphaSetPixel(x:Int,y:Int,color:UInt,alpha:Float,drawTarget:BitmapData)
-    {
-
-        //ENGAGE MAXIMUM OPTIMIZED mZ LELELEL
-
-        // alpha = m.min(alpha,1);
-        var colorR= ((m.floor(color / 256*256) %256));
-        var colorG = ((m.floor(color / 256) %256));
-        var colorB = ((color %256));
-
-        var pixel = drawTarget.getPixel(x,y);
-        var pixelR = ((m.floor(pixel / 256*256) %256));
-        var pixelG = ((m.floor(pixel / 256) %256));
-        var pixelB = ((pixel %256));
-
-        var finalR = colorR + m.floor((pixelR - colorR)*(1-alpha));
-        var finalG = colorG + m.floor((pixelG - colorG)*(1-alpha));
-        var finalB = colorB + m.floor((pixelB - colorB)*(1-alpha));
-
-        var finalColor = finalR * 256 * 256 + finalG * 256 + finalB;
-        // trace(finalColor);
-        drawTarget.setPixel(x, y, finalColor);
-    }
     
-    private static function setAAPixel(x:Float, y:Float, color:UInt, alpha:Float=1, antiAlias:Bool=false, drawTarget:BitmapData)
+    private static function setAAPixel(x:Float, y:Float, color:ColorObject, alpha:Float=1, antiAlias:Bool=false, drawTarget:GraphicObject)
     {
         if(!antiAlias)
         {
-            alphaSetPixel(m.floor(x), m.floor(y), color,alpha,drawTarget);
+            drawTarget.drawPixel(m.floor(x), m.floor(y), color,alpha);
         }
         else
         {
@@ -56,28 +30,30 @@ class Primitives
             if(xDecimal < yDecimal)
             {
                 xDecimal = 0;
-            } else {
+            }
+            else
+            {
                 yDecimal = 0;
             }
 
             if(xDecimal == 0 && yDecimal == 0)
             {
-                alphaSetPixel(m.round(x), m.round(y), color,alpha,drawTarget);
+                drawTarget.drawPixel(m.round(x), m.round(y), color,alpha);
             }
             else if (yDecimal == 0)
             {
-                alphaSetPixel(m.floor(x), m.floor(y), color,alpha*(1-xDecimal),drawTarget);
-                alphaSetPixel(m.ceil(x), m.floor(y), color,alpha*xDecimal,drawTarget);
+                drawTarget.drawPixel(m.floor(x), m.floor(y), color,alpha*(1-xDecimal));
+                drawTarget.drawPixel(m.ceil(x), m.floor(y), color,alpha*xDecimal);
             }
             else if (xDecimal == 0)
             {
-                alphaSetPixel(m.floor(x), m.floor(y), color,alpha*(1-yDecimal),drawTarget);
-                alphaSetPixel(m.floor(x), m.ceil(y), color,alpha*yDecimal,drawTarget);
+                drawTarget.drawPixel(m.floor(x), m.floor(y), color,alpha*(1-yDecimal));
+                drawTarget.drawPixel(m.floor(x), m.ceil(y), color,alpha*yDecimal);
             }
         }
     }
 
-    private static function drawSolidLine(startX:Float, startY:Float, endX:Float, endY:Float, color:UInt, alpha:Float, drawTarget:BitmapData)
+    private static function drawSolidLine(startX:Float, startY:Float, endX:Float, endY:Float, color:ColorObject, alpha:Float, drawTarget:GraphicObject)
     {
         var dx:Float = m.abs(endX - startX);
         var dy:Float = m.abs(endY - startY);
@@ -98,7 +74,7 @@ class Primitives
             for(x in 0...m.floor(dx))
             {
                 var y:Float = slope*x;
-                alphaSetPixel(m.floor(startX+x), m.floor(startY+y), color, alpha, drawTarget);
+                drawTarget.drawPixel(m.floor(startX+x), m.floor(startY+y), color, alpha);
             }
         }
         else
@@ -115,12 +91,12 @@ class Primitives
             for(y in m.floor(startY)...m.floor(endY))
             {
                 var x = y/slope+startX;
-                alphaSetPixel(m.floor(x), y, color, alpha, drawTarget);
+                drawTarget.drawPixel(m.floor(x), y, color, alpha);
             }
         }
     }
 
-    private static function drawAALine(startX:Float, startY:Float, endX:Float, endY:Float, color:UInt, alpha:Float, drawTarget:BitmapData)
+    private static function drawAALine(startX:Float, startY:Float, endX:Float, endY:Float, color:ColorObject, alpha:Float, drawTarget:GraphicObject)
     {
         var steep:Bool = m.abs(endY - startY) > m.abs(endX - startX);
  
@@ -160,13 +136,13 @@ class Primitives
         var startPixelY = m.floor(endpointY);
         if(steep)
         {
-            alphaSetPixel(startPixelY,   startPixelX, color, (1 - (endpointY % 1)) * xGap, drawTarget);
-            alphaSetPixel(startPixelY+1, startPixelX, color, (endpointY % 1) * xGap, drawTarget);
+            drawTarget.drawPixel(startPixelY,   startPixelX, color, (1 - (endpointY % 1)) * xGap);
+            drawTarget.drawPixel(startPixelY+1, startPixelX, color, (endpointY % 1) * xGap);
         }
         else
         {
-            alphaSetPixel(startPixelX, startPixelY  , color, (1 - (endpointY % 1)) * xGap, drawTarget);
-            alphaSetPixel(startPixelX, startPixelY+1, color, (endpointY % 1) * xGap, drawTarget);
+            drawTarget.drawPixel(startPixelX, startPixelY  , color, (1 - (endpointY % 1)) * xGap);
+            drawTarget.drawPixel(startPixelX, startPixelY+1, color, (endpointY % 1) * xGap);
         }
 
         var yIntercept = endpointY + slope; // first y-intersection for the main loop
@@ -180,13 +156,13 @@ class Primitives
         var endPixelY = m.floor(endpointY);
         if(steep)
         {
-            alphaSetPixel(endPixelY,   endPixelX, color, (1 - (endpointY % 1)) * xGap, drawTarget);
-            alphaSetPixel(endPixelY + 1, endPixelX, color, (endpointY % 1) * xGap, drawTarget);
+            drawTarget.drawPixel(endPixelY,   endPixelX, color, (1 - (endpointY % 1)) * xGap);
+            drawTarget.drawPixel(endPixelY + 1, endPixelX, color, (endpointY % 1) * xGap);
         }
         else
         {
-            alphaSetPixel(endPixelX, endPixelY, color, (1 - (endpointY % 1)) * xGap, drawTarget);
-            alphaSetPixel(endPixelX, endPixelY + 1, color, (endpointY % 1) * xGap, drawTarget);
+            drawTarget.drawPixel(endPixelX, endPixelY, color, (1 - (endpointY % 1)) * xGap);
+            drawTarget.drawPixel(endPixelX, endPixelY + 1, color, (endpointY % 1) * xGap);
         }
         // trace(xGap);
         // trace(endpointY);
@@ -197,20 +173,20 @@ class Primitives
         {
             if(steep)
             {
-                alphaSetPixel(m.floor(yIntercept)  , x, color, 1 - (yIntercept%1), drawTarget);
-                alphaSetPixel(m.floor(yIntercept)+1, x, color, yIntercept%1, drawTarget);
+                drawTarget.drawPixel(m.floor(yIntercept)  , x, color, 1 - (yIntercept%1));
+                drawTarget.drawPixel(m.floor(yIntercept)+1, x, color, yIntercept%1);
             }
             else
             {
-                alphaSetPixel(x, m.floor(yIntercept),  color, 1 - (yIntercept%1), drawTarget);
-                alphaSetPixel(x, m.floor(yIntercept)+1, color, yIntercept%1, drawTarget);
+                drawTarget.drawPixel(x, m.floor(yIntercept),  color, 1 - (yIntercept%1));
+                drawTarget.drawPixel(x, m.floor(yIntercept)+1, color, yIntercept%1);
             }
             yIntercept = yIntercept + slope;
         }
         // trace(steep);
     }
     
-    public static function drawLine(startX:Float, startY:Float, endX:Float, endY:Float, color:UInt, ?alpha:Float, ?lineWidth:Float, ?antiAlias:Bool, ?drawTarget:BitmapData)
+    public static function drawLine(startX:Float, startY:Float, endX:Float, endY:Float, color:ColorObject, ?alpha:Float, ?lineWidth:Float, ?antiAlias:Bool, ?drawTarget:GraphicObject)
     {
         if(drawTarget == null)
         {
@@ -242,7 +218,7 @@ class Primitives
         drawTarget.unlock();
     }
     
-    public static function drawCircle(centerX:Float, centerY:Float, radius:Float, color:UInt, alpha:Float=1, antiAlias:Bool=false, lineWidth:Float=1, ?drawTarget:BitmapData)
+    public static function drawCircle(centerX:Float, centerY:Float, radius:Float, color:ColorObject, alpha:Float=1, antiAlias:Bool=false, lineWidth:Float=1, ?drawTarget:GraphicObject)
     {
         if(drawTarget == null)
         {
@@ -293,7 +269,7 @@ class Primitives
         drawTarget.unlock();
     }
 
-    public static function drawEllipse(centerX:Float, centerY:Float, a:Float, b:Float, color:UInt, ?AntiAlias:Bool, ?drawTarget:BitmapData)
+    public static function drawEllipse(centerX:Float, centerY:Float, a:Float, b:Float, color:ColorObject, ?AntiAlias:Bool, ?drawTarget:GraphicObject)
     {
         if(drawTarget == null)
         {
@@ -311,7 +287,7 @@ class Primitives
         drawTarget.unlock();
     }
 
-    public static function drawPolygon(points:Array<Array<Float>>, color:UInt, ?lineWidth, ?antiAlias:Bool, ?drawTarget:BitmapData)
+    public static function drawPolygon(points:Array<Array<Float>>, color:ColorObject, ?lineWidth, ?antiAlias:Bool, ?drawTarget:GraphicObject)
     {
         if(drawTarget == null)
         {
