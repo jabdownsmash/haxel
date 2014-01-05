@@ -49,7 +49,7 @@ class Main extends Core
         Primitives.drawLine(10,15,60,70,new ColorObject(1,1,1), true);
         // Primitives.drawCircle(151,101,100,0xFFFFFF, true, 0);
         Primitives.drawCircle(101,101,100,new ColorObject(1,1,1), 1, true, 1);
-        Text.draw("hi pppl", new haxel.FontObject(), new ColorObject(1,1,1),70);
+        Text.draw("hi pppl",30,40, new ColorObject(1,1,1),70);
         //Primitives.drawCircle(250,200,100,0xFFFFFF, 0);
         // Primitives.drawPolygon([[200, 200,],[200, 300],[300,300]], 0xFFFFFF);
         //Primitives.drawEllipse(200,200,100,50,0xFFFFFF);

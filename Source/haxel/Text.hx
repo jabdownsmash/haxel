@@ -4,6 +4,7 @@ package haxel;
 import flash.text.TextField;
 import flash.text.TextFieldAutoSize;
 import flash.text.TextFormat;
+import flash.text.TextFormatAlign;
 import openfl.Assets;
 
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!//
@@ -15,26 +16,72 @@ import openfl.Assets;
 //                                                                          //
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!//
 
+class Align
+{
+    public static inline var Left = 'left';
+    public static inline var LeftRight = 'right';
+    public static inline var Center = 'center';
+    public static inline var Justify = 'justify';
+}
+
 class Text
 {
     
-    private static inline var defaultFont:String = "assets/slkscr";
-    
-    public static function draw(text:String = "", font:FontObject, color:ColorObject, size:Float = 20, ?target:GraphicObject)
+    public static function draw(?target:GraphicObject, text:String, x:Float, y:Float, font:String = "assets/slkscr.ttf", color:ColorObject, size:Float = 20, align:String = Align.Left, wordWrap:Bool = false, ?width:Float, ?height:Float, ?leading:Int)
     {
         if(target == null)
         {
             target = Screen.getDrawTarget();
         }
-        var _textField = new TextField();
+        var textField = new TextField();
         
-        var _format = new TextFormat(defaultFont, size, color.getUInt());
+        var fontObj = Assets.getFont(font);
+        var format = new TextFormat(fontObj.fontName, size, color.getUInt());
+        if(align == Align.Left)
+        {
+            format.align = TextFormatAlign.LEFT;
+        }
+        if(align == Align.Justify)
+        {
+            format.align = TextFormatAlign.JUSTIFY;
+        }
+        if(align == Align.Center)
+        {
+            format.align = TextFormatAlign.CENTER;
+        }
+        if(align == Align.Justify)
+        {
+            format.align = TextFormatAlign.JUSTIFY;
+        }
+        if(leading != null)
+        {
+            format.leading = leading;
+        }
         
-        _textField.text = text;
-        _textField.embedFonts = true;
-        _textField.setTextFormat(_format);
-        _textField.autoSize = TextFieldAutoSize.CENTER;
+        textField.text = text;
+        textField.embedFonts = true;
+        textField.setTextFormat(format);
+        // textField.autoSize = TextFieldAutoSize.CENTER;
+        textField.selectable = false;
 
-        target.draw(_textField);
+        textField.wordWrap = wordWrap;
+        if(width != null)
+        {
+            textField.width = width;
+        }
+        else
+        {
+            textField.width = Std.int(textField.textWidth + 4);
+        }
+        if(height != null)
+        {
+            textField.height = height;
+        }
+        else
+        {
+            textField.height = Std.int(textField.textHeight + 4);
+        }
+
+        target.draw(textField);
     }
 }
