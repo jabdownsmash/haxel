@@ -1,0 +1,9 @@
+
+name: "haxel"
+description: "A framework"
+
+url: "http://localhost:4000"
+
+markdown: redcarpet
+permalink: pretty
+pygments: true
