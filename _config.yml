@@ -1,8 +1,7 @@
 
 name: "haxel"
 description: "A framework"
-
-url: "http://sepharoth213.github.io/haxel/"
+baseurl: "/haxel"
 
 markdown: redcarpet
 permalink: pretty
