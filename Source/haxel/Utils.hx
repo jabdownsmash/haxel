@@ -42,10 +42,16 @@ class Utils
 
     public static function getColorFromInt(intColor:UInt):ColorObject
     {
-        var a:Float = (Std.int(Std.int(Std.int(intColor/256)/256)/256)%256)/255;
         var r:Float = (Std.int(Std.int(intColor/256)/256)%256)/255;
         var g:Float = (Std.int(intColor/256)%256)/255;
         var b:Float = (intColor%256)/255;
+        return new ColorObject(r,g,b);
+    }
+
+    public static function getAlphaColorFromInt(intColor:UInt):ColorObject
+    {
+        var color = getColorFromInt(intColor);
+        color.a = (Std.int(Std.int(Std.int(intColor/256)/256)/256)%256)/255;
         return new ColorObject(r,g,b,a);
     }
 
@@ -55,7 +61,7 @@ class Utils
         finalColor.r = newColor.r + (targetColor.r - newColor.r)*(1-newColor.a);
         finalColor.g = newColor.g + (targetColor.g - newColor.g)*(1-newColor.a);
         finalColor.b = newColor.b + (targetColor.b - newColor.b)*(1-newColor.a);
-        finalColor.a = newColor.a + (1 - newColor.a)*targetColor.a;
+        // finalColor.a = newColor.a + (1 - newColor.a)*targetColor.a;
         return finalColor;
     }
 }

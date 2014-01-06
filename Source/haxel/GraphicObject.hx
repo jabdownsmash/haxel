@@ -19,6 +19,8 @@ class GraphicObject
 
     public var bitmapData:BitmapData;
 
+    private var hasAlpha:Bool;
+
     public var width(get,never):Int;
     public function get_width():Int
     {
@@ -38,6 +40,7 @@ class GraphicObject
             return;
         }
         bitmapData = new BitmapData(width,height,alpha,fillColor.getUInt());
+        hasAlpha = alpha;
     }
 
     public function draw(image:Dynamic,?transformMatrix:Matrix,x:Float = 0,y:Float = 0, centerX:Float = 0, centerY:Float = 0, xScale:Float = 1, yScale:Float = 1, rotation:Float = 0)
@@ -87,13 +90,28 @@ class GraphicObject
 
     public function setPixel(x:Int,y:Int,color:ColorObject)
     {
-        bitmapData.setPixel32(x,y,color.getUInt());
+        if(hasAlpha)
+        {    
+            bitmapData.setPixel32(x,y,color.getAlphaUInt());
+        }
+        else
+        {
+            bitmapData.setPixel(x,y,color.getUInt());
+        }
     }
     
     public function getPixel(x:Int,y:Int):ColorObject
     {
-        var colorInt = bitmapData.getPixel32(x,y);
-        return Utils.getColorFromInt(colorInt);
+        if(hasAlpha)
+        {
+            var colorInt = bitmapData.getPixel32(x,y);
+            return Utils.getColorFromInt(colorInt);
+        }
+        else
+        {
+            var colorInt = bitmapData.getPixel(x,y);
+            return Utils.getAlphaColorFromInt(colorInt);
+        }
     }
 
     public function drawPixel(x:Int,y:Int,color:ColorObject)

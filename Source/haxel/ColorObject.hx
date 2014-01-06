@@ -33,6 +33,11 @@ class ColorObject
 
     public function getUInt():UInt
     {
-        return Std.int(a*255) * 256 * 256 * 256 + Std.int(r*255) * 256 * 256 + Std.int(g*255) * 256 + Std.int(b*255);
+        return Std.int(r*255) * 256 * 256 + Std.int(g*255) * 256 + Std.int(b*255);
+    }
+
+    public function getAlphaUInt():UInt
+    {
+        return Std.int(a*255) * 256 * 256 * 256 +  getUInt();
     }
 }
