@@ -16,7 +16,7 @@ import haxe.Timer;
 
 class Time
 {
-    public static var framerate:Float = 60;
+    public static var framerate:Float = 30;
     public static var maxElapsed = 0.0333;
     public static var maxFrameSkip = 5;
     public static var tickRate = 4;
@@ -53,28 +53,27 @@ class Time
         last = time;
 
         if (delta < rate) return;
-        if (delta > skip) delta = skip;
+        // if (delta > skip) delta = skip;
 
         var framesCalled = 0;
 
         while (delta >= rate)
         {
-            Core.updateFrame();
 
             if(callbackFunction != null)
             {
                 callbackFunction(rate);
             }
-
+            Core.updateFrame();
             delta -= rate;
             framesCalled += 1;
         }
 
-        Core.updatePostFrame();
 
         if(postCallbackFunction != null)
         {
             postCallbackFunction(framesCalled);
         }
+        Core.updatePostFrame();
     }
 }

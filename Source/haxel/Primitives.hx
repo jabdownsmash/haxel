@@ -186,7 +186,7 @@ class Primitives
         // trace(steep);
     }
     
-    public static function drawLine(?drawTarget:GraphicObject, startX:Float, startY:Float, endX:Float, endY:Float, color:ColorObject, ?lineWidth:Float, ?antiAlias:Bool)
+    public static function drawLine(?drawTarget:GraphicObject, startX:Float, startY:Float, endX:Float, endY:Float, color:ColorObject, lineWidth:Float=1, antiAlias:Bool=false)
     {
         if(drawTarget == null)
         {
@@ -196,15 +196,19 @@ class Primitives
         //in between setpixels
         drawTarget.lock();
         
-        if(lineWidth == null || lineWidth == 0)
+        if(lineWidth == 1)
         {
-            if(antiAlias == null || antiAlias == false)
+            if(antiAlias == false)
                 drawSolidLine(drawTarget,startX,startY,endX,endY,color);
             else
                 drawAALine(drawTarget,startX,startY,endX,endY,color);
         }
         else
         {
+            if(antiAlias == false)
+                drawSolidLine(drawTarget,startX,startY,endX,endY,color);
+            else
+                drawAALine(drawTarget,startX,startY,endX,endY,color);
             // drawWidthLine(drawTarget,startX,startY,endX,endY,color,lineWidth);
         }
         
@@ -265,7 +269,7 @@ class Primitives
         drawTarget.unlock();
     }
 
-    public static function drawEllipse(?drawTarget:GraphicObject, centerX:Float, centerY:Float, a:Float, b:Float, color:ColorObject, ?AntiAlias:Bool)
+    public static function drawEllipse(?drawTarget:GraphicObject, centerX:Float, centerY:Float, a:Float, b:Float, color:ColorObject, antiAlias:Bool=false)
     {
         if(drawTarget == null)
         {
@@ -283,21 +287,16 @@ class Primitives
         drawTarget.unlock();
     }
 
-    public static function drawPolygon(?drawTarget:GraphicObject, points:Array<Array<Float>>, color:ColorObject, ?lineWidth, ?antiAlias:Bool)
+    public static function drawPolygon(?drawTarget:GraphicObject, points:Array<Array<Float>>, color:ColorObject, lineWidth:Int=1, antiAlias:Bool=false)
     {
         if(drawTarget == null)
         {
             drawTarget = Screen.getDrawTarget();
         }
         drawTarget.lock();
-
-        if(lineWidth == null)
-        {
-            lineWidth = 1;
-        }
         
-        if(lineWidth > 0)
-        {
+
+        if(lineWidth > 0){
             var lastX:Float = points[points.length-1][0];
             var lastY:Float = points[points.length-1][1];
 
@@ -305,14 +304,150 @@ class Primitives
             {
                 var x:Float = points[i][0];
                 var y:Float = points[i][1];
-                //trace(lastX+", "+lastY+", "+x+", "+y);
-                drawLine(drawTarget, lastX, lastY, x, y, color, lineWidth, antiAlias);
-                
+                if (antiAlias) 
+                {   
+                    drawAALine(drawTarget, lastX, lastY, x, y, color);
+                }
+                else if(lineWidth > 0)
+                {
+                    drawSolidLine(drawTarget, lastX, lastY, x, y, color);
+                }
+
                 lastX = x;
                 lastY = y;
             }
         }
-        
+        else
+        {
+            var minX:Int = m.floor(points[0][0]);
+            var minY:Int = m.floor(points[0][1]);
+            var maxX:Int = m.ceil(points[0][0]);
+            var maxY:Int = m.ceil(points[0][1]);
+            
+            var lastX:Float = points[points.length-1][0];
+            var lastY:Float = points[points.length-1][1];
+
+            for(i in 0...points.length)
+            {
+                var x:Float = points[i][0];
+                var y:Float = points[i][1];
+                if (antiAlias) 
+                {   
+                    drawAALine(drawTarget, m.round(lastX), m.round(lastY), m.round(x), m.round(y), color);
+                }
+
+                lastX = x;
+                lastY = y;
+
+                minX = m.floor(m.min(minX, m.floor(x)));
+                minY = m.floor(m.min(minY, m.floor(y)));
+                maxX = m.ceil(m.max(maxX, m.ceil(x)));
+                maxY = m.ceil(m.max(maxY, m.ceil(y)));
+            }
+            
+            var xSize:Int = maxX-minX+1;
+            var ySize:Int = maxY-minY+1;
+
+            var b:Array<Array<Int>> = [];
+            for(i in 0...ySize)
+            {
+                var row:Array<Int> = [];
+                for(j in 0...xSize)
+                {
+                    row.push(0);
+                }
+                b.push(row);
+            }
+
+            // trace(xSize + ", " + ySize);
+            // trace(minX + ", " + minY);
+            // trace(maxX + ", " + maxY);
+
+            var lastX:Int = m.round(points[points.length-1][0]);
+            var lastY:Int = m.round(points[points.length-1][1]);
+
+            for(i in 0...points.length)
+            {
+                var x0:Int = m.round(points[i][0]);
+                var y0:Int = m.round(points[i][1]);
+
+                // trace(x0 + ", " + y0 + ", " + lastX + ", " + lastY);
+
+                var startX:Int;
+                var startY:Int;
+
+                var endX:Int;
+                var endY:Int;
+
+                if(lastX < x0)
+                {
+                    startX = lastX-minX;
+                    startY = lastY-minY;
+                    endX = x0-minX;
+                    endY = y0-minY;
+                }
+                else
+                {
+                    startX = x0-minX;
+                    startY = y0-minY;
+                    endX = lastX-minX;
+                    endY = lastY-minY;
+                }
+
+                lastX = x0;
+                lastY = y0;
+
+                var dx:Int = endX - startX;
+                var dy:Int = endY - startY;
+
+                if(dx != 0)
+                {
+                    var slope:Float = dy/dx;
+
+                    // trace(startX + ", " + endX + ", " + startY + ", " + endY + ", " + dx + ", " + dy + ", " + slope);
+
+                    for(x in startX...endX)
+                    {
+                        var y:Float = startY+slope*(x-startX);
+                        // trace(x + ", " + y);
+                        b[m.floor(y)][x]++;
+                    }
+                }
+            }
+            for(x in 0...xSize)
+            {
+                var draw:Int = 0;
+                for(y in 0...ySize)
+                {
+                    draw = (draw + b[y][x]) % 2;
+                    if(b[y][x]==0)
+                    {
+                        b[y][x] = draw;
+                    }
+                    else
+                    {
+                        if(antiAlias){
+                            b[y][x] = (b[y][x] + draw)%2;
+                        }
+                    }
+
+                }
+            }
+            for(i in 0...xSize)
+            {
+                for(j in 0...ySize)
+                {
+                    if(b[j][i] > 0)
+                    {
+                        var x:Int = minX + i;
+                        var y:Int = minY + j;
+
+                        drawTarget.drawPixel(x,y,color);
+                    }
+                }
+            }
+        }
+
         drawTarget.unlock();
     }
 }
