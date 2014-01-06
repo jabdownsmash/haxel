@@ -82,6 +82,6 @@ class Text
             textField.height = Std.int(textField.textHeight + 4);
         }
 
-        target.draw(textField);
+        target.draw(textField,x,y);
     }
 }
