@@ -34,9 +34,9 @@ class Utils
 
     public static function getColorFromInt(intColor:UInt):ColorObject
     {
-        var r:Float = Std.int(Std.int(intColor/256)/256)/255;
-        var g:Float = Std.int(intColor/256)/255;
-        var b:Float = intColor/255;
+        var r:Float = (Std.int(Std.int(intColor/256)/256)%256)/255;
+        var g:Float = (Std.int(intColor/256)%256)/255;
+        var b:Float = (intColor%256)/255;
         return new ColorObject(r,g,b);
     }
 
