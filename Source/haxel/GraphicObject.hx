@@ -17,7 +17,7 @@ import flash.geom.Matrix;
 class GraphicObject
 {
 
-    private var bitmapData:BitmapData;
+    public var bitmapData:BitmapData;
 
     public var width(get,never):Int;
     public function get_width():Int
@@ -30,11 +30,12 @@ class GraphicObject
         return Std.int(bitmapData.rect.height);
     }
 
-    public function new(?width:Int,?height:Int,?alpha:Bool,?fillColor:ColorObject)
+    public function new(width:Int = 1,height:Int = 1,alpha:Bool= true,?fillColor:ColorObject)
     {
         if(fillColor == null)
         {
-            fillColor = new ColorObject(0,0,0);
+            bitmapData = new BitmapData(width,height,alpha);
+            return;
         }
         bitmapData = new BitmapData(width,height,alpha,fillColor.getUInt());
     }

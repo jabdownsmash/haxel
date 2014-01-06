@@ -1,6 +1,5 @@
 
-import flash.display.Bitmap;
-import flash.display.BitmapData;
+import haxel.GraphicObject;
 import haxel.Core;
 import haxel.ColorObject;
 import haxel.Screen;
@@ -10,7 +9,7 @@ import haxel.Text;
 import haxel.KeyboardInput;
 import haxel.MouseInput;
 import haxel.Time;
-import openfl.Assets;
+import haxel.Utils;
 
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!//
 //                                                                          //
@@ -31,7 +30,7 @@ class Main extends Core
     }
 
     var init:Bool = false;
-    var image:BitmapData;
+    var image:GraphicObject;
 
     public function timerDraw(times:Float)
     {
@@ -39,12 +38,12 @@ class Main extends Core
 
         if(!init)
         {
-            image = Assets.getBitmapData("assets/openfl.png");
+            image = Utils.loadImage("assets/openfl.png");
             Screen.scaleScreen(1);
             init = true;
         }
         // Screen.renderMode = SCREEN_RENDER;
-        Screen.draw(image,320,190,image.rect.width/2,image.rect.height/2,.7,.8,Math.PI/2);
+        Screen.draw(image,320,190,image.width/2,image.height/2,.7,.8,Math.PI/2);
         // Primitives.drawLine(60,80,80,150,0xFFFFFF);
         Primitives.drawLine(10,15,60,70,new ColorObject(1,1,1), true);
         // Primitives.drawCircle(151,101,100,0xFFFFFF, true, 0);

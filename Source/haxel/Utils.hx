@@ -2,6 +2,7 @@
 package haxel;
 
 import flash.geom.Matrix;
+import openfl.Assets;
 
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!//
 //                                                                          //
@@ -15,6 +16,13 @@ import flash.geom.Matrix;
 class Utils
 {
     private static var m = Math;
+
+    public static function loadImage(path:String):GraphicObject
+    {
+        var image = new GraphicObject();
+        image.bitmapData = Assets.getBitmapData(path);
+        return image;
+    }
 
     public static function generateTransformMatrix(translateX:Float,translateY:Float, centerX:Float = 0, centerY:Float = 0, xScale:Float = 1, yScale:Float = 1, rotation:Float = 0):Matrix
     {
