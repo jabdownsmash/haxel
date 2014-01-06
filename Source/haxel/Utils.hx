@@ -52,7 +52,7 @@ class Utils
     {
         var color = getColorFromInt(intColor);
         color.a = (Std.int(Std.int(Std.int(intColor/256)/256)/256)%256)/255;
-        return new ColorObject(r,g,b,a);
+        return color;
     }
 
     public static function blend(targetColor:ColorObject,newColor:ColorObject):ColorObject
@@ -61,7 +61,7 @@ class Utils
         finalColor.r = newColor.r + (targetColor.r - newColor.r)*(1-newColor.a);
         finalColor.g = newColor.g + (targetColor.g - newColor.g)*(1-newColor.a);
         finalColor.b = newColor.b + (targetColor.b - newColor.b)*(1-newColor.a);
-        // finalColor.a = newColor.a + (1 - newColor.a)*targetColor.a;
+        finalColor.a = newColor.a + (1 - newColor.a)*targetColor.a;
         return finalColor;
     }
 }
