@@ -32,6 +32,10 @@ class GraphicObject
 
     public function new(?width:Int,?height:Int,?alpha:Bool,?fillColor:ColorObject)
     {
+        if(fillColor == null)
+        {
+            fillColor = new ColorObject(0,0,0);
+        }
         bitmapData = new BitmapData(width,height,alpha,fillColor.getUInt());
     }
 
@@ -82,12 +86,12 @@ class GraphicObject
 
     public function setPixel(x:Int,y:Int,color:ColorObject)
     {
-        bitmapData.setPixel(x,y,color.getUInt());
+        bitmapData.setPixel32(x,y,color.getUInt());
     }
     
     public function getPixel(x:Int,y:Int):ColorObject
     {
-        var colorInt = bitmapData.getPixel(x,y);
+        var colorInt = bitmapData.getPixel32(x,y);
         return Utils.getColorFromInt(colorInt);
     }
 

@@ -33,11 +33,6 @@ class ColorObject
 
     public function getUInt():UInt
     {
-        var color:UInt = Std.int(r*255) * 256 * 256 + Std.int(g*255) * 256 + Std.int(b*255);
-        if(alpha)
-        {
-            color = Std.int(a*255) * 256 * 256 * 256 + color;
-        }
-        return color;
+        return Std.int(a*255) * 256 * 256 * 256 + Std.int(r*255) * 256 * 256 + Std.int(g*255) * 256 + Std.int(b*255);
     }
 }
