@@ -40,12 +40,13 @@ class Utils
         return new ColorObject(r,g,b);
     }
 
-    public static function blend(color1:ColorObject,color2:ColorObject,alpha:Float):ColorObject
+    public static function blend(targetColor:ColorObject,newColor:ColorObject):ColorObject
     {
         var finalColor = new ColorObject(0,0,0);
-        finalColor.r = color2.r + (color1.r - color2.r)*(1-alpha);
-        finalColor.g = color2.g + (color1.g - color2.g)*(1-alpha);
-        finalColor.b = color2.b + (color1.b - color2.b)*(1-alpha);
+        finalColor.r = newColor.r + (targetColor.r - newColor.r)*(1-newColor.a);
+        finalColor.g = newColor.g + (targetColor.g - newColor.g)*(1-newColor.a);
+        finalColor.b = newColor.b + (targetColor.b - newColor.b)*(1-newColor.a);
+        finalColor.a = newColor.a + (1 - newColor.a)*targetColor.a;
         return finalColor;
     }
 }

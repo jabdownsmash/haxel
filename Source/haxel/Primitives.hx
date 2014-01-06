@@ -16,11 +16,11 @@ class Primitives
 {
     private static var m = Math;
     
-    private static function setAAPixel(drawTarget:GraphicObject, x:Float, y:Float, color:ColorObject, alpha:Float=1, antiAlias:Bool=false)
+    private static function setAAPixel(drawTarget:GraphicObject, x:Float, y:Float, color:ColorObject, antiAlias:Bool=false)
     {
         if(!antiAlias)
         {
-            drawTarget.drawPixel(m.floor(x), m.floor(y), color,alpha);
+            drawTarget.drawPixel(m.floor(x), m.floor(y), color);
         }
         else
         {
@@ -38,22 +38,22 @@ class Primitives
 
             if(xDecimal == 0 && yDecimal == 0)
             {
-                drawTarget.drawPixel(m.round(x), m.round(y), color,alpha);
+                drawTarget.drawPixel(m.round(x), m.round(y), color);
             }
             else if (yDecimal == 0)
             {
-                drawTarget.drawPixel(m.floor(x), m.floor(y), color,alpha*(1-xDecimal));
-                drawTarget.drawPixel(m.ceil(x), m.floor(y), color,alpha*xDecimal);
+                drawTarget.drawPixel(m.floor(x), m.floor(y), new ColorObject(color.r,color.g,color.b,color.a*(1-xDecimal)));
+                drawTarget.drawPixel(m.ceil(x), m.floor(y), new ColorObject(color.r,color.g,color.b,color.a*xDecimal));
             }
             else if (xDecimal == 0)
             {
-                drawTarget.drawPixel(m.floor(x), m.floor(y), color,alpha*(1-yDecimal));
-                drawTarget.drawPixel(m.floor(x), m.ceil(y), color,alpha*yDecimal);
+                drawTarget.drawPixel(m.floor(x), m.floor(y), new ColorObject(color.r,color.g,color.b,color.a*(1-yDecimal)));
+                drawTarget.drawPixel(m.floor(x), m.ceil(y), new ColorObject(color.r,color.g,color.b,color.a*yDecimal));
             }
         }
     }
 
-    private static function drawSolidLine(drawTarget:GraphicObject, startX:Float, startY:Float, endX:Float, endY:Float, color:ColorObject, alpha:Float)
+    private static function drawSolidLine(drawTarget:GraphicObject, startX:Float, startY:Float, endX:Float, endY:Float, color:ColorObject)
     {
         var dx:Float = m.abs(endX - startX);
         var dy:Float = m.abs(endY - startY);
@@ -74,7 +74,7 @@ class Primitives
             for(x in 0...m.floor(dx))
             {
                 var y:Float = slope*x;
-                drawTarget.drawPixel(m.floor(startX+x), m.floor(startY+y), color, alpha);
+                drawTarget.drawPixel(m.floor(startX+x), m.floor(startY+y), color);
             }
         }
         else
@@ -91,12 +91,12 @@ class Primitives
             for(y in m.floor(startY)...m.floor(endY))
             {
                 var x = y/slope+startX;
-                drawTarget.drawPixel(m.floor(x), y, color, alpha);
+                drawTarget.drawPixel(m.floor(x), y, color);
             }
         }
     }
 
-    private static function drawAALine(drawTarget:GraphicObject, startX:Float, startY:Float, endX:Float, endY:Float, color:ColorObject, alpha:Float)
+    private static function drawAALine(drawTarget:GraphicObject, startX:Float, startY:Float, endX:Float, endY:Float, color:ColorObject)
     {
         var steep:Bool = m.abs(endY - startY) > m.abs(endX - startX);
  
@@ -136,13 +136,13 @@ class Primitives
         var startPixelY = m.floor(endpointY);
         if(steep)
         {
-            drawTarget.drawPixel(startPixelY,   startPixelX, color, (1 - (endpointY % 1)) * xGap);
-            drawTarget.drawPixel(startPixelY+1, startPixelX, color, (endpointY % 1) * xGap);
+            drawTarget.drawPixel(startPixelY,   startPixelX, new ColorObject(color.r,color.g,color.b, color.a * (1 - (endpointY % 1)) * xGap));
+            drawTarget.drawPixel(startPixelY+1, startPixelX, new ColorObject(color.r,color.g,color.b, color.a * (endpointY % 1) * xGap));
         }
         else
         {
-            drawTarget.drawPixel(startPixelX, startPixelY  , color, (1 - (endpointY % 1)) * xGap);
-            drawTarget.drawPixel(startPixelX, startPixelY+1, color, (endpointY % 1) * xGap);
+            drawTarget.drawPixel(startPixelX, startPixelY  , new ColorObject(color.r,color.g,color.b, color.a * (1 - (endpointY % 1)) * xGap));
+            drawTarget.drawPixel(startPixelX, startPixelY+1, new ColorObject(color.r,color.g,color.b, color.a * (endpointY % 1) * xGap));
         }
 
         var yIntercept = endpointY + slope; // first y-intersection for the main loop
@@ -156,13 +156,13 @@ class Primitives
         var endPixelY = m.floor(endpointY);
         if(steep)
         {
-            drawTarget.drawPixel(endPixelY,   endPixelX, color, (1 - (endpointY % 1)) * xGap);
-            drawTarget.drawPixel(endPixelY + 1, endPixelX, color, (endpointY % 1) * xGap);
+            drawTarget.drawPixel(endPixelY,   endPixelX, new ColorObject(color.r,color.g,color.b, color.a * (1 - (endpointY % 1)) * xGap));
+            drawTarget.drawPixel(endPixelY + 1, endPixelX, new ColorObject(color.r,color.g,color.b, color.a * (endpointY % 1) * xGap));
         }
         else
         {
-            drawTarget.drawPixel(endPixelX, endPixelY, color, (1 - (endpointY % 1)) * xGap);
-            drawTarget.drawPixel(endPixelX, endPixelY + 1, color, (endpointY % 1) * xGap);
+            drawTarget.drawPixel(endPixelX, endPixelY, new ColorObject(color.r,color.g,color.b, color.a * (1 - (endpointY % 1)) * xGap));
+            drawTarget.drawPixel(endPixelX, endPixelY + 1, new ColorObject(color.r,color.g,color.b, color.a * (endpointY % 1) * xGap));
         }
         // trace(xGap);
         // trace(endpointY);
@@ -173,28 +173,24 @@ class Primitives
         {
             if(steep)
             {
-                drawTarget.drawPixel(m.floor(yIntercept)  , x, color, 1 - (yIntercept%1));
-                drawTarget.drawPixel(m.floor(yIntercept)+1, x, color, yIntercept%1);
+                drawTarget.drawPixel(m.floor(yIntercept)  , x, new ColorObject(color.r,color.g,color.b, color.a * (1 - (yIntercept%1))));
+                drawTarget.drawPixel(m.floor(yIntercept)+1, x, new ColorObject(color.r,color.g,color.b, color.a * yIntercept%1));
             }
             else
             {
-                drawTarget.drawPixel(x, m.floor(yIntercept),  color, 1 - (yIntercept%1));
-                drawTarget.drawPixel(x, m.floor(yIntercept)+1, color, yIntercept%1);
+                drawTarget.drawPixel(x, m.floor(yIntercept),  new ColorObject(color.r,color.g,color.b, color.a * (1 - (yIntercept%1))));
+                drawTarget.drawPixel(x, m.floor(yIntercept)+1, new ColorObject(color.r,color.g,color.b, color.a * yIntercept%1));
             }
             yIntercept = yIntercept + slope;
         }
         // trace(steep);
     }
     
-    public static function drawLine(?drawTarget:GraphicObject, startX:Float, startY:Float, endX:Float, endY:Float, color:ColorObject, ?alpha:Float, ?lineWidth:Float, ?antiAlias:Bool)
+    public static function drawLine(?drawTarget:GraphicObject, startX:Float, startY:Float, endX:Float, endY:Float, color:ColorObject, ?lineWidth:Float, ?antiAlias:Bool)
     {
         if(drawTarget == null)
         {
             drawTarget = Screen.getDrawTarget();
-        }
-        if(alpha == null)
-        {
-            alpha = 1;
         }
         //prevents things from trying to update the drawTarget
         //in between setpixels
@@ -203,13 +199,13 @@ class Primitives
         if(lineWidth == null || lineWidth == 0)
         {
             if(antiAlias == null || antiAlias == false)
-                drawSolidLine(drawTarget,startX,startY,endX,endY,color,alpha);
+                drawSolidLine(drawTarget,startX,startY,endX,endY,color);
             else
-                drawAALine(drawTarget,startX,startY,endX,endY,color,alpha);
+                drawAALine(drawTarget,startX,startY,endX,endY,color);
         }
         else
         {
-            // drawWidthLine(drawTarget,startX,startY,endX,endY,color,alpha,lineWidth);
+            // drawWidthLine(drawTarget,startX,startY,endX,endY,color,lineWidth);
         }
         
         //releases control of drawTarget
@@ -218,7 +214,7 @@ class Primitives
         drawTarget.unlock();
     }
     
-    public static function drawCircle(?drawTarget:GraphicObject, centerX:Float, centerY:Float, radius:Float, color:ColorObject, alpha:Float=1, antiAlias:Bool=false, lineWidth:Float=1)
+    public static function drawCircle(?drawTarget:GraphicObject, centerX:Float, centerY:Float, radius:Float, color:ColorObject, antiAlias:Bool=false, lineWidth:Float=1)
     {
         if(drawTarget == null)
         {
@@ -231,40 +227,40 @@ class Primitives
             if(lineWidth==0)
             {
                 var y:Float = m.sqrt(radius*radius - x*x);
-                drawSolidLine(drawTarget, m.round(centerX+x), m.round(centerY), m.round(centerX + x), m.round(centerY+y), color, alpha);
-                drawSolidLine(drawTarget, m.round(centerX+x), m.round(centerY), m.round(centerX + x), m.round(centerY-y), color, alpha);
-                drawSolidLine(drawTarget, m.round(centerX-x), m.round(centerY), m.round(centerX - x), m.round(centerY+y), color, alpha);
-                drawSolidLine(drawTarget, m.round(centerX-x), m.round(centerY), m.round(centerX - x), m.round(centerY-y), color, alpha);
-                drawSolidLine(drawTarget, m.round(centerX+y), m.round(centerY), m.round(centerX + y), m.round(centerY+x), color, alpha);
-                drawSolidLine(drawTarget, m.round(centerX+y), m.round(centerY), m.round(centerX + y), m.round(centerY-x), color, alpha);
-                drawSolidLine(drawTarget, m.round(centerX-y), m.round(centerY), m.round(centerX - y), m.round(centerY+x), color, alpha);
-                drawSolidLine(drawTarget, m.round(centerX-y), m.round(centerY), m.round(centerX - y), m.round(centerY-x), color, alpha);
+                drawSolidLine(drawTarget, m.round(centerX+x), m.round(centerY), m.round(centerX + x), m.round(centerY+y), color);
+                drawSolidLine(drawTarget, m.round(centerX+x), m.round(centerY), m.round(centerX + x), m.round(centerY-y), color);
+                drawSolidLine(drawTarget, m.round(centerX-x), m.round(centerY), m.round(centerX - x), m.round(centerY+y), color);
+                drawSolidLine(drawTarget, m.round(centerX-x), m.round(centerY), m.round(centerX - x), m.round(centerY-y), color);
+                drawSolidLine(drawTarget, m.round(centerX+y), m.round(centerY), m.round(centerX + y), m.round(centerY+x), color);
+                drawSolidLine(drawTarget, m.round(centerX+y), m.round(centerY), m.round(centerX + y), m.round(centerY-x), color);
+                drawSolidLine(drawTarget, m.round(centerX-y), m.round(centerY), m.round(centerX - y), m.round(centerY+x), color);
+                drawSolidLine(drawTarget, m.round(centerX-y), m.round(centerY), m.round(centerX - y), m.round(centerY-x), color);
             }
             else
             {
                 var y:Float = m.sqrt(radius*radius - x*x);
-                setAAPixel(drawTarget, centerX + x, centerY+y, color, alpha, antiAlias);
-                setAAPixel(drawTarget, centerX + x, centerY-y, color, alpha, antiAlias);
-                setAAPixel(drawTarget, centerX - x, centerY+y, color, alpha, antiAlias);
-                setAAPixel(drawTarget, centerX - x, centerY-y, color, alpha, antiAlias);
-                setAAPixel(drawTarget, centerX + y, centerY+x, color, alpha, antiAlias);
-                setAAPixel(drawTarget, centerX + y, centerY-x, color, alpha, antiAlias);
-                setAAPixel(drawTarget, centerX - y, centerY+x, color, alpha, antiAlias);
-                setAAPixel(drawTarget, centerX - y, centerY-x, color, alpha, antiAlias);
+                setAAPixel(drawTarget, centerX + x, centerY+y, color, antiAlias);
+                setAAPixel(drawTarget, centerX + x, centerY-y, color, antiAlias);
+                setAAPixel(drawTarget, centerX - x, centerY+y, color, antiAlias);
+                setAAPixel(drawTarget, centerX - x, centerY-y, color, antiAlias);
+                setAAPixel(drawTarget, centerX + y, centerY+x, color, antiAlias);
+                setAAPixel(drawTarget, centerX + y, centerY-x, color, antiAlias);
+                setAAPixel(drawTarget, centerX - y, centerY+x, color, antiAlias);
+                setAAPixel(drawTarget, centerX - y, centerY-x, color, antiAlias);
             }
         }
         if(antiAlias)
         {
             var x:Float = m.floor(c);
             var y:Float = m.sqrt(radius*radius - x*x);
-            setAAPixel(drawTarget, centerX + x, centerY+y, color, alpha, antiAlias);
-            setAAPixel(drawTarget, centerX + x, centerY-y, color, alpha, antiAlias);
-            setAAPixel(drawTarget, centerX - x, centerY+y, color, alpha, antiAlias);
-            setAAPixel(drawTarget, centerX - x, centerY-y, color, alpha, antiAlias);
-            // setAAPixel(drawTarget, centerX + y, centerY+x, color, alpha, antiAlias);
-            // setAAPixel(drawTarget, centerX + y, centerY-x, color, alpha, antiAlias);
-            // setAAPixel(drawTarget, centerX - y, centerY+x, color, alpha, antiAlias);
-            // setAAPixel(drawTarget, centerX - y, centerY-x, color, alpha, antiAlias);
+            setAAPixel(drawTarget, centerX + x, centerY+y, color, antiAlias);
+            setAAPixel(drawTarget, centerX + x, centerY-y, color, antiAlias);
+            setAAPixel(drawTarget, centerX - x, centerY+y, color, antiAlias);
+            setAAPixel(drawTarget, centerX - x, centerY-y, color, antiAlias);
+            // setAAPixel(drawTarget, centerX + y, centerY+x, color, antiAlias);
+            // setAAPixel(drawTarget, centerX + y, centerY-x, color, antiAlias);
+            // setAAPixel(drawTarget, centerX - y, centerY+x, color, antiAlias);
+            // setAAPixel(drawTarget, centerX - y, centerY-x, color, antiAlias);
         }
         drawTarget.unlock();
     }

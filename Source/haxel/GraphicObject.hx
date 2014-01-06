@@ -91,8 +91,8 @@ class GraphicObject
         return Utils.getColorFromInt(colorInt);
     }
 
-    public function drawPixel(x:Int,y:Int,color:ColorObject,alpha:Float)
+    public function drawPixel(x:Int,y:Int,color:ColorObject)
     {
-        setPixel(x, y, Utils.blend(getPixel(x,y),color,alpha));
+        setPixel(x, y, Utils.blend(getPixel(x,y),color));
     }
 }

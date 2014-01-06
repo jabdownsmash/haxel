@@ -17,22 +17,18 @@ class ColorObject
     public var g:Float;
     public var b:Float;
     public var a:Float;
-    public var alpha:Bool;
+    public var alpha(get,never):Bool;
+    public function get_alpha():Bool
+    {
+        return a == 1;
+    }
 
-    public function new(r:Float,g:Float,b:Float,?a:Float)
+    public function new(r:Float,g:Float,b:Float,a:Float = 1)
     {
         this.r = r;
         this.g = g;
         this.b = b;
-        if(a != null)
-        {
-            alpha = true;
-            this.a = a;
-        }
-        else
-        {
-            alpha = false;
-        }
+        this.a = a;
     }
 
     public function getUInt():UInt
