@@ -34,18 +34,18 @@
             {% for item in site.navbar_items %}
               {% if item.dropdown == 'true' %}
                 <li class="dropdown">
-                  <a href={{site.baseurl}}{{item.link}} class="dropdown-toggle" data-toggle="dropdown">{{item.title}}<b class="caret"></b></a>
+                  <a href={{ site.baseurl | append:item.link }} class="dropdown-toggle" data-toggle="dropdown">{{item.title}}<b class="caret"></b></a>
                   <ul class="dropdown-menu">
                     {% for dropdown_item in item.dropdown_items %}
-                      <li><a href={{dropdown_item.link}}>{{dropdown_item.title}}</a></li>
+                      <li><a href={{ site.baseurl | append:dropdown_item.link }}>{{dropdown_item.title}}</a></li>
                     {% endfor %}
                   </ul>
                 </li>
               {% else %}
                 {% if item.name == page.name %}
-                  <li class="active"><a href={{item.link}}>{{item.title}}</a></li>
+                  <li class="active"><a href={{ site.baseurl | append:item.link }}>{{item.title}}</a></li>
                 {% else %}
-                  <li><a href={{item.link}}>{{item.title}}</a></li>
+                  <li><a href={{ site.baseurl | append:item.link }}>{{item.title}}</a></li>
                 {% endif %}
               {% endif %}
             {% endfor %}
@@ -72,7 +72,7 @@
           </div><!-- /.col-xs-12 main -->
 
         </div><!--/.row-->
-      </div><!--/.container-->
+      </div><!--/.conta-->
 
     </div>
 
