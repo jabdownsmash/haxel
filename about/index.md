@@ -30,7 +30,7 @@ Officially, haxel supports Linux, Windows, and OSX, along with Flash, iOS, and A
 The limited scope of haxel allows for a very tightly integrated API. For example, all haxel classes are either objects or static classes: object classes are guaranteed to not have any static member, and static classes are never instanced. This is communicated in the classes' names, listed below.
 
 ###What exactly can haxel do?
-Take a look at the [docs page](/docs).
+Take a look at the [docs page]({{baseurl}}/docs).
 
 <a name="howinstall"></a>
 ###What do I need to do to get started?
