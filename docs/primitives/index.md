@@ -1,20 +1,27 @@
 ---
 layout: default
-title: aboutnnnnnnn
-name: aboirenst
+title: Primitives
+name: docs
 sidebar_tags:
-  - display: "What is haxel?"
-    link: "#whatis"
-  - display: "What platforms does haxel support?"
-    link: "#whatplatforms"
-  - display: "What do you mean, clarity?"
-    link: "#whatclarity"
-  - display: "What exactly can haxel do?"
-    link: "#whatdo"
-  - display: "What do I need to do to get started?"
-    link: "#whatstart"
-  - display: "How do I install haxel?"
-    link: "#whatthefuck"
+  - display: 'Public members'
+    link: "#members"
+  - display: 'Public functions'
+    link: "#functions"
 ---
+<a name="members"></a>
 
-Incoming super awesome webpage
+###Public members:
+
+{% highlight hx %}
+
+{% endhighlight %}
+<a name="functions"></a>
+
+###Public functions:
+
+{% highlight hx %}
+public static function drawCircle(?drawTarget:GraphicObject, centerX:Float, centerY:Float, radius:Float, color:ColorObject, antiAlias:Bool=false, lineWidth:Float=1)
+public static function drawEllipse(?drawTarget:GraphicObject, centerX:Float, centerY:Float, a:Float, b:Float, color:ColorObject, antiAlias:Bool=false)
+public static function drawPolygon(?drawTarget:GraphicObject, points:Array<Array<Float>>, color:ColorObject, lineWidth:Int=1, antiAlias:Bool=false)
+public static function drawLine(?drawTarget:GraphicObject, startX:Float, startY:Float, endX:Float, endY:Float, color:ColorObject, lineWidth:Float=1, antiAlias:Bool=false)
+{% endhighlight %}

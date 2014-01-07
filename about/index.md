@@ -2,6 +2,7 @@
 layout: default
 title: about
 name: about
+sidebar: 'true'
 sidebar_tags:
   - display: "What is haxel?"
     link: ""
@@ -14,7 +15,7 @@ sidebar_tags:
   - display: "What do I need to do to get started?"
     link: "#whatstart"
   - display: "How do I install haxel?"
-    link: "#whatthefuck"
+    link: "#howinstall"
 ---
 <a name="whatplatforms"></a>
 ###What is haxel?
@@ -29,26 +30,9 @@ Officially, haxel supports Linux, Windows, and OSX, along with Flash, iOS, and A
 The limited scope of haxel allows for a very tightly integrated API. For example, all haxel classes are either objects or static classes: object classes are guaranteed to not have any static member, and static classes are never instanced. This is communicated in the classes' names, listed below.
 
 ###What exactly can haxel do?
-Take a look at the docs(which are still being made): 
+Take a look at the [docs page](/docs).
 
- - Graphics
-  - ColorObject
-  - GraphicObject
-  - Primitives
-  - Screen
-  - Text
- - Sound
-  - AudioObject
- - Input
-  - KeyboardInput
-  - Key
-  - MouseInput<a name="whatstart"></a>
- - Utils
-  - Core
-  - Time
-  - Utils
-
-<a name="whatthefuck"></a>
+<a name="howinstall"></a>
 ###What do I need to do to get started?
 Simply make your Main extend haxel.Core, and within new(), call super() and set some callback functions for haxel.Time to use. No inits(), no buffer creation, no touchy settings. All parts of haxel are taken care of by haxel.Core. Skimming through the docs for haxel.Core, haxel.Time, and haxel.Screen will give you all you need to get started with haxel.
 

@@ -1,20 +1,35 @@
 ---
 layout: default
-title: aboutnnnnnnn
-name: aboirenst
+title: GraphicObject
+name: docs
 sidebar_tags:
-  - display: "What is haxel?"
-    link: "#whatis"
-  - display: "What platforms does haxel support?"
-    link: "#whatplatforms"
-  - display: "What do you mean, clarity?"
-    link: "#whatclarity"
-  - display: "What exactly can haxel do?"
-    link: "#whatdo"
-  - display: "What do I need to do to get started?"
-    link: "#whatstart"
-  - display: "How do I install haxel?"
-    link: "#whatthefuck"
+  - display: 'Public members'
+    link: "#members"
+  - display: 'Public functions'
+    link: "#functions"
 ---
+<a name="members"></a>
 
-Incoming super awesome webpage
+###Public members:
+
+{% highlight hx %}
+public var bitmapData:BitmapData;
+public var width(get,never):Int;
+public var height(get,never):Int;
+{% endhighlight %}
+<a name="functions"></a>
+
+###Public functions:
+
+{% highlight hx %}
+public function new(width:Int = 1,height:Int = 1,alpha:Bool= true,?fillColor:ColorObject)
+public function draw(image:Dynamic,?transformMatrix:Matrix,x:Float = 0,y:Float = 0, centerX:Float = 0, centerY:Float = 0, xScale:Float = 1, yScale:Float = 1, rotation:Float = 0)
+public function clear(color:ColorObject)
+public function getBitmap()
+public function getBitmapData()
+public function lock()
+public function unlock()
+public function setPixel(x:Int,y:Int,color:ColorObject)
+public function getPixel(x:Int,y:Int):ColorObject
+public function drawPixel(x:Int,y:Int,color:ColorObject)
+{% endhighlight %}

@@ -1,20 +1,34 @@
 ---
 layout: default
-title: aboutnnnnnnn
-name: aboirenst
+title: AudioObject
+name: docs
 sidebar_tags:
-  - display: "What is haxel?"
-    link: "#whatis"
-  - display: "What platforms does haxel support?"
-    link: "#whatplatforms"
-  - display: "What do you mean, clarity?"
-    link: "#whatclarity"
-  - display: "What exactly can haxel do?"
-    link: "#whatdo"
-  - display: "What do I need to do to get started?"
-    link: "#whatstart"
-  - display: "How do I install haxel?"
-    link: "#whatthefuck"
+  - display: 'Public members'
+    link: "#members"
+  - display: 'Public functions'
+    link: "#functions"
 ---
+<a name="members"></a>
 
-Incoming super awesome webpage
+###Public members:
+
+{% highlight hx %}
+public var volume(get, set):Float;
+public var pan(get, set):Float;
+public var playing(default, null):Bool;
+public var position(get, set):Float;
+public var callbackFunction:AudioObject->Bool->Void;
+public var callbackBeforeEnd:Bool;
+public var callbackAfterEnd:Bool;
+public var loop:Bool;
+{% endhighlight %}
+<a name="functions"></a>
+
+###Public functions:
+
+{% highlight hx %}
+public function new(?audioPath:String) 
+public function load(audioPath:String)
+public function play(?newPosition:Float, ?newVolume:Float, ?newLoop:Bool, ?newPan:Float):Void
+public function stop():Void
+{% endhighlight %}

@@ -58,14 +58,13 @@
         <div class="row row-offcanvas row-offcanvas-left">
           
           <!-- sidebar -->
-          <div class="col-xs-6 col-sm-3 sidebar-offcanvas" id="sidebar" role="navigation">
-              <ul class="nav pre-scrollable">
-                {% for tag in page.sidebar_tags %}
-                <li><a href={{tag.link}}>{{tag.display}}</a></li>  
-                {% endfor %}          
-              </ul>
-          </div>
-      
+            <div class="col-xs-6 col-sm-3 sidebar-offcanvas" id="sidebar" role="navigation">
+                <ul class="nav pre-scrollable">
+                  {% for tag in page.sidebar_tags %}
+                  <li><a href={{tag.link}}>{{tag.display}}</a></li>  
+                  {% endfor %}          
+                </ul>
+            </div>
           <!-- main area -->
           <div class="col-xs-12 col-sm-8">
             <h1>{{page.title}}</h1>

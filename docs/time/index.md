@@ -1,20 +1,30 @@
 ---
 layout: default
-title: aboutnnnnnnn
-name: aboirenst
+title: Time
+name: docs
 sidebar_tags:
-  - display: "What is haxel?"
-    link: "#whatis"
-  - display: "What platforms does haxel support?"
-    link: "#whatplatforms"
-  - display: "What do you mean, clarity?"
-    link: "#whatclarity"
-  - display: "What exactly can haxel do?"
-    link: "#whatdo"
-  - display: "What do I need to do to get started?"
-    link: "#whatstart"
-  - display: "How do I install haxel?"
-    link: "#whatthefuck"
+  - display: 'Public members'
+    link: "#members"
+  - display: 'Public functions'
+    link: "#functions"
 ---
+<a name="members"></a>
 
-Incoming super awesome webpage
+###Public members:
+
+{% highlight hx %}
+public static var framerate:Float = 30;
+public static var maxElapsed = 0.0333;
+public static var maxFrameSkip = 5;
+public static var tickRate = 4;
+
+public static var callbackFunction:Float->Void;
+public static var postCallbackFunction:Int->Void;
+{% endhighlight %}
+<a name="functions"></a>
+
+###Public functions:
+
+{% highlight hx %}
+
+{% endhighlight %}

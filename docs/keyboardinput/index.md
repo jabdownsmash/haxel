@@ -1,20 +1,29 @@
 ---
 layout: default
-title: aboutnnnnnnn
-name: aboirenst
+title: KeyboardInput
+name: docs
 sidebar_tags:
-  - display: "What is haxel?"
-    link: "#whatis"
-  - display: "What platforms does haxel support?"
-    link: "#whatplatforms"
-  - display: "What do you mean, clarity?"
-    link: "#whatclarity"
-  - display: "What exactly can haxel do?"
-    link: "#whatdo"
-  - display: "What do I need to do to get started?"
-    link: "#whatstart"
-  - display: "How do I install haxel?"
-    link: "#whatthefuck"
+  - display: 'Public members'
+    link: "#members"
+  - display: 'Public functions'
+    link: "#functions"
 ---
+<a name="members"></a>
 
-Incoming super awesome webpage
+###Public members:
+
+{% highlight hx %}
+public static var keyString:String = "";
+public static var lastKey:Int;
+{% endhighlight %}
+<a name="functions"></a>
+
+###Public functions:
+
+{% highlight hx %}
+public static function check(input:Int):Bool
+public static function pressed(input:Int):Bool
+public static function released(input:Int):Bool
+public static function init()
+public static function update()
+{% endhighlight %}

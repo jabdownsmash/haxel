@@ -1,20 +1,30 @@
 ---
 layout: default
-title: aboutnnnnnnn
-name: aboirenst
+title: Text
+name: docs
 sidebar_tags:
-  - display: "What is haxel?"
-    link: "#whatis"
-  - display: "What platforms does haxel support?"
-    link: "#whatplatforms"
-  - display: "What do you mean, clarity?"
-    link: "#whatclarity"
-  - display: "What exactly can haxel do?"
-    link: "#whatdo"
-  - display: "What do I need to do to get started?"
-    link: "#whatstart"
-  - display: "How do I install haxel?"
-    link: "#whatthefuck"
+  - display: 'Public members'
+    link: "#members"
+  - display: 'Public functions'
+    link: "#functions"
 ---
+<a name="members"></a>
 
-Incoming super awesome webpage
+###Public members:
+
+{% highlight hx %}
+class Align
+{
+    public static inline var Left = 'left';
+    public static inline var LeftRight = 'right';
+    public static inline var Center = 'center';
+    public static inline var Justify = 'justify';
+}
+{% endhighlight %}
+<a name="functions"></a>
+
+###Public functions:
+
+{% highlight hx %}
+public static function draw(?target:GraphicObject, text:String, x:Float, y:Float, font:String = "assets/slkscr.ttf", color:ColorObject, size:Float = 20, align:String = Align.Left, wordWrap:Bool = false, ?width:Float, ?height:Float, ?leading:Int)
+{% endhighlight %}
