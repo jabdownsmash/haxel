@@ -55,11 +55,11 @@ ColorObjects are strictly used for representing colors in haxel.
 <a name="sound"></a>
 Available classes:
 
- - [ColorObject]({{baseurl}}/docs/colorobject)
- - [GraphicObject]({{baseurl}}/docs/graphicobject)
- - [Primitives]({{baseurl}}/docs/primitives)
- - [Screen]({{baseurl}}/docs/screen)
- - [Text]({{baseurl}}/docs/text)
+ - [ColorObject]({{ site.baseurl }}/docs/colorobject)
+ - [GraphicObject]({{ site.baseurl }}/docs/graphicobject)
+ - [Primitives]({{ site.baseurl }}/docs/primitives)
+ - [Screen]({{ site.baseurl }}/docs/screen)
+ - [Text]({{ site.baseurl }}/docs/text)
 
 ###Sound
 <a name="input"></a>
@@ -67,7 +67,7 @@ The only sound class in haxel is AudioObject, but that is only a testament to ho
 
 Available classes:
 
- - [AudioObject]({{baseurl}}/docs/audioobject)
+ - [AudioObject]({{ site.baseurl }}/docs/audioobject)
 
 ###Input
 Input in haxel is very straightforward: it is strictly a state checking system. KeyboardInput holds functions to check key states, using the items in Key to access the key indices. MouseInput is a very simple class to check the mouse button states and the mouse position.
@@ -75,9 +75,9 @@ Input in haxel is very straightforward: it is strictly a state checking system. 
 
 Available classes:
 
- - [KeyboardInput]({{baseurl}}/docs/keyboardinput)
- - [Key]({{baseurl}}/docs/key)
- - [MouseInput]({{baseurl}}/docs/mouseinput)
+ - [KeyboardInput]({{ site.baseurl }}/docs/keyboardinput)
+ - [Key]({{ site.baseurl }}/docs/key)
+ - [MouseInput]({{ site.baseurl }}/docs/mouseinput)
 
 ###Utils
 In haxel, Core and Time are the heart of the operation. Your Main() must extend Core for haxel to work, and setting callback functions for the Time() class is the only way to get haxel to do anything.
@@ -86,6 +86,6 @@ The Utils class holds some miscellaneous functions that don't fit in any of the 
 
 Available Classes:
 
- - [Core]({{baseurl}}/docs/core)
- - [Time]({{baseurl}}/docs/time)
- - [Utils]({{baseurl}}/docs/utils)
+ - [Core]({{ site.baseurl }}/docs/core)
+ - [Time]({{ site.baseurl }}/docs/time)
+ - [Utils]({{ site.baseurl }}/docs/utils)
