@@ -6,24 +6,57 @@ baseurl: "/haxel"
 markdown: redcarpet
 permalink: pretty
 pygments: true
+
 url: "http://sepharoth213.github.io/haxel"
+title: "haxel"
 
 navbar_items:
-  - title: "banger"
-    name: "haxel"
-    link: "#"
-  - title: "bangers"
-    name: "haxel2"
-    link: "#"
-  - title: "bangerz"
-    name: "haxel3"
-    link: "#"
-  - title: "bangerz"
-    name: "haxel3"
+  - title: "about"
+    name: "about"
+    link: "/about"
+  - title: "getting started"
+    name: "started"
+    link: "/getting-started"
+  - title: "docs"
+    name: "docs"
+    link: "/docs"
+  - title: "graphics"
     link: "#"
     dropdown: 'true'
     dropdown_items:
-      - title: "yepper"
-        link: "#roonie"
-      - title: "harahh"
-        link: "hahhoo" 
+      - title: "ColorObject"
+        link: "/docs/colorobject"
+      - title: "GraphicObject"
+        link: "/docs/graphicobject" 
+      - title: "Primitives"
+        link: "/docs/primitives" 
+      - title: "Screen"
+        link: "/docs/screen" 
+      - title: "Text"
+        link: "/docs/text" 
+  - title: "sound"
+    link: "#"
+    dropdown: 'true'
+    dropdown_items:
+      - title: "AudioObject"
+        link: "/docs/audioobject"
+  - title: "input"
+    link: "#"
+    dropdown: 'true'
+    dropdown_items:
+      - title: "KeyboardInput"
+        link: "/docs/keyboardinput"
+      - title: "Key"
+        link: "/docs/key"
+      - title: "MouseInput"
+        link: "/docs/mouseinput"
+  - title: "utils"
+    link: "#"
+    dropdown: 'true'
+    dropdown_items:
+      - title: "Core"
+        link: "/docs/core"
+      - title: "Time"
+        link: "/docs/time"
+      - title: "Utils"
+        link: "/docs/utils"
