@@ -64,16 +64,16 @@
         <div class="row row-offcanvas row-offcanvas-left">
           
           <!-- sidebar -->
-          <div class="col-xs-6 col-sm-3 sidebar-offcanvas" id="sidebar" role="navigation">
+          <div class="col-xs-4 col-sm-2 sidebar-offcanvas" id="sidebar" role="navigation">
               <ul class="nav">
-                <li><a href="#">Link 1</a></li>
-                <li><a href="#">Link 2</a></li>
-                <li><a href="#">Link 3</a></li>              
+                {% for tag in page.sidebar_tags %}
+                <li><a href={{tag.link}}>{{tag.display}}</a></li>  
+                {% endfor %}          
               </ul>
           </div>
       
           <!-- main area -->
-          <div class="col-xs-12 col-sm-9">
+          <div class="col-xs-12 col-sm-10">
             <h1>{{page.title}}</h1>
             {{content}}
           </div><!-- /.col-xs-12 main -->

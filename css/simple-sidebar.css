@@ -14,6 +14,7 @@ body {
 }
 #sidebar .nav {
   width: 95%;
+  position: fixed;
 }
 #sidebar li {
   border:0 #f2f2f2 solid;
