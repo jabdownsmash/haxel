@@ -1,6 +1,7 @@
 ---
 layout: default
 title: haxel
+name: haxel
 summary: A cool framework yo
 sidebar_tags:
   - display: thingy

@@ -6,3 +6,24 @@ baseurl: "/haxel"
 markdown: redcarpet
 permalink: pretty
 pygments: true
+url: "http://sepharoth213.github.io/haxel"
+
+navbar_items:
+  - title: "banger"
+    name: "haxel"
+    link: "#"
+  - title: "bangers"
+    name: "haxel2"
+    link: "#"
+  - title: "bangerz"
+    name: "haxel3"
+    link: "#"
+  - title: "bangerz"
+    name: "haxel3"
+    link: "#"
+    dropdown: 'true'
+    dropdown_items:
+      - title: "yepper"
+        link: "#roonie"
+      - title: "harahh"
+        link: "hahhoo" 
