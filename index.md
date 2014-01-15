@@ -4,7 +4,7 @@ title: welcome
 name: welcome
 ---
 
-This is the official haxel website.
+This is the official haxel website!
 
 Here's a list of resources available:
 
