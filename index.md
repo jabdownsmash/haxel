@@ -6,6 +6,8 @@ name: welcome
 
 This is the official haxel website!
 
+Haxel is no longer under development, but this page will be here to show off the work that was done with the framework and the website.
+
 Here's a list of resources available:
 
  - The [GitHub repository](http://github.com/sepharoth213/haxel) has the source if you want to look at it or download it.
